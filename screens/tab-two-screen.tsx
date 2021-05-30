@@ -1,18 +1,18 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 
-import { Text, View, EditScreenInfo } from "../components";
+import { ThemedText, ThemedView, EditScreenInfo } from "../components";
 
 export const TabTwoScreen = (): JSX.Element => (
-  <View style={styles.container}>
-    <Text style={styles.title}>Tab Two</Text>
-    <View
+  <ThemedView style={styles.container}>
+    <ThemedText style={styles.title}>{"Tab Two"}</ThemedText>
+    <ThemedView
       style={styles.separator}
       lightColor="#eee"
       darkColor="rgba(255,255,255,0.1)"
     />
     <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
-  </View>
+  </ThemedView>
 );
 
 const styles = StyleSheet.create({

@@ -128,7 +128,9 @@ module.exports = defineConfig({
 
     "lodash/prefer-lodash-method": "off",
 
-    "react-native/no-raw-text": ["error", { skip: ["MonoText"] }],
+    "react/jsx-no-literals": "error",
+
+    "react-native/no-raw-text": ["error", { skip: ["MonoText", "ThemedText"] }],
 
     "security/detect-object-injection": "off",
 

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 
-import { MovieDetails, MovieSearch, View } from "../components";
+import { MovieDetails, MovieSearch, ThemedView } from "../components";
 import { useLayout } from "../hooks";
 
-import type { SearchMovieResult } from "../services/tmdb/types";
+import type { SearchMovieResult } from "../services/tmdb";
 
 export const DiscoverScreen = (): JSX.Element => {
   const { window } = useLayout();
@@ -12,23 +12,23 @@ export const DiscoverScreen = (): JSX.Element => {
   const [movie, setMovie] = useState<SearchMovieResult>();
 
   return (
-    <View
+    <ThemedView
       onLayout={({ nativeEvent: { layout } }) => setHeight(layout.height)}
       style={styles.container}
     >
-      <View style={styles.searchContainer}>
+      <ThemedView style={styles.searchContainer}>
         <MovieSearch
           movie={movie}
           maxHeight={height * (1 - 0.618)}
           selectMovie={setMovie}
         />
-      </View>
+      </ThemedView>
       {movie && (
         <ScrollView>
           <MovieDetails movie={movie} />
         </ScrollView>
       )}
-    </View>
+    </ThemedView>
   );
 };
 

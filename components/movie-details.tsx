@@ -7,16 +7,11 @@ import {
   StyleSheet,
 } from "react-native";
 
-import { useMovie } from "../services/tmdb/hooks";
+import { getTmdbImageUri, useMovie } from "../services/tmdb";
 
-import { Text, View } from "./themed";
+import { ThemedText, ThemedView } from "./themed";
 
-import type { SearchMovieResult } from "../services/tmdb/types";
-
-const getImageUri = (path: string, variant: "poster" | "backdrop"): string =>
-  `https://themoviedb.org/t/p/${
-    variant === "poster" ? "w600_and_h900_bestv2" : "w1000_and_h450_multi_faces"
-  }${path}`;
+import type { SearchMovieResult } from "../services/tmdb";
 
 export const MovieDetails = (props: {
   readonly movie: SearchMovieResult;
@@ -26,65 +21,68 @@ export const MovieDetails = (props: {
   const movie = { ...props.movie, ...result.movie };
 
   return (
-    <View style={styles.container}>
+    <ThemedView style={styles.container}>
       {isLoading && <ActivityIndicator />}
       <ImageBackground
-        source={{ uri: getImageUri(movie.backdrop_path ?? "", "backdrop") }}
+        source={{ uri: getTmdbImageUri(movie.backdrop_path ?? "", "backdrop") }}
         resizeMode="cover"
         style={styles.header}
         imageStyle={styles.headerImageStyle}
       >
         {movie.poster_path && (
           <Image
-            source={{ uri: getImageUri(movie.poster_path, "poster") }}
+            source={{ uri: getTmdbImageUri(movie.poster_path, "poster") }}
             style={styles.poster}
             accessibilityIgnoresInvertColors
             resizeMode="contain"
           />
         )}
       </ImageBackground>
-      <View style={styles.details}>
-        <Text style={styles.heading}>
-          <Text style={styles.title}>{movie.title} </Text>
+      <ThemedView style={styles.details}>
+        <ThemedText style={styles.heading}>
+          <ThemedText style={styles.title}>{movie.title}</ThemedText>
           {movie.release_date && (
-            <Text style={styles.year}>
-              ({new Date(movie.release_date).getFullYear()})
-            </Text>
+            <ThemedText style={styles.year}>
+              {` (${new Date(movie.release_date).getFullYear()})`}
+            </ThemedText>
           )}
-        </Text>
-        <Text style={styles.score}>{movie.vote_average * 10}% User Score</Text>
-        <View>
-          <Text style={styles.facts}>
+        </ThemedText>
+        <ThemedText style={styles.score}>
+          {`${movie.vote_average * 10}% User Score`}
+        </ThemedText>
+        <ThemedView>
+          <ThemedText style={styles.facts}>
             {movie.release_date && (
-              <Text>{format(new Date(movie.release_date), "dd/MM/yyyy")}</Text>
+              <ThemedText>
+                {format(new Date(movie.release_date), "dd/MM/yyyy")}
+              </ThemedText>
             )}
             {"runtime" in movie && movie.runtime && (
-              <Text>
-                {" "}
-                - {Math.floor(movie.runtime / 60)}h {movie.runtime % 60}m
-              </Text>
+              <ThemedText>
+                {` - ${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m`}
+              </ThemedText>
             )}
-          </Text>
+          </ThemedText>
           {"genres" in movie && (
-            <Text style={styles.facts}>
+            <ThemedText style={styles.facts}>
               {movie.genres.map((g, index, array) => (
-                <Text key={g.id}>
+                <ThemedText key={g.id}>
                   {g.name}
                   {index !== array.length - 1 && ", "}
-                </Text>
+                </ThemedText>
               ))}
-            </Text>
+            </ThemedText>
           )}
-        </View>
-      </View>
-      <View style={styles.info}>
+        </ThemedView>
+      </ThemedView>
+      <ThemedView style={styles.info}>
         {"tagline" in movie && (
-          <Text style={styles.tagline}>{movie.tagline}</Text>
+          <ThemedText style={styles.tagline}>{movie.tagline}</ThemedText>
         )}
-        <Text style={styles.overviewHeading}>Overview</Text>
-        <Text style={styles.overview}>{movie.overview}</Text>
-      </View>
-    </View>
+        <ThemedText style={styles.overviewHeading}>{"Overview"}</ThemedText>
+        <ThemedText style={styles.overview}>{movie.overview}</ThemedText>
+      </ThemedView>
+    </ThemedView>
   );
 };
 

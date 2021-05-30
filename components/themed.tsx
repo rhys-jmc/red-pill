@@ -13,7 +13,7 @@ type ThemeProps = { readonly lightColor?: string; readonly darkColor?: string };
 export type TextProps = ThemeProps & DefaultText["props"];
 export type ViewProps = ThemeProps & DefaultView["props"];
 
-export const Text = ({
+export const ThemedText = ({
   style,
   lightColor,
   darkColor,
@@ -24,7 +24,7 @@ export const Text = ({
   return <DefaultText style={[{ color }, style]} {...otherProps} />;
 };
 
-export const View = ({
+export const ThemedView = ({
   style,
   lightColor,
   darkColor,

@@ -5,7 +5,7 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { theme } from "../constants";
 
 import { MonoText } from "./styled-text";
-import { Text, View } from "./themed";
+import { ThemedText, ThemedView } from "./themed";
 
 import type { WebBrowserResult } from "expo-web-browser";
 
@@ -14,43 +14,45 @@ export const EditScreenInfo = ({
 }: {
   readonly path: string;
 }): JSX.Element => (
-  <View>
-    <View style={styles.getStartedContainer}>
-      <Text
+  <ThemedView>
+    <ThemedView style={styles.getStartedContainer}>
+      <ThemedText
         style={styles.getStartedText}
         lightColor="rgba(0,0,0,0.8)"
         darkColor="rgba(255,255,255,0.8)"
       >
-        Open up the code for this screen:
-      </Text>
+        {"Open up the code for this screen:"}
+      </ThemedText>
 
-      <View
+      <ThemedView
         style={[styles.codeHighlightContainer, styles.homeScreenFilename]}
         darkColor="rgba(255,255,255,0.05)"
         lightColor="rgba(0,0,0,0.05)"
       >
         <MonoText>{path}</MonoText>
-      </View>
+      </ThemedView>
 
-      <Text
+      <ThemedText
         style={styles.getStartedText}
         lightColor="rgba(0,0,0,0.8)"
         darkColor="rgba(255,255,255,0.8)"
       >
-        Change any of the text, save the file, and your app will automatically
-        update.
-      </Text>
-    </View>
+        {
+          "Change any of the text, save the file, and your app will automatically update."
+        }
+      </ThemedText>
+    </ThemedView>
 
-    <View style={styles.helpContainer}>
+    <ThemedView style={styles.helpContainer}>
       <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-        <Text style={styles.helpLinkText} lightColor={theme.light.tint}>
-          Tap here if your app doesn&apos;t automatically update after making
-          changes
-        </Text>
+        <ThemedText style={styles.helpLinkText} lightColor={theme.light.tint}>
+          {
+            "Tap here if your app doesn&apos;t automatically update after making changes"
+          }
+        </ThemedText>
       </TouchableOpacity>
-    </View>
-  </View>
+    </ThemedView>
+  </ThemedView>
 );
 
 const handleHelpPress = (): Promise<WebBrowserResult> =>

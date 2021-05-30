@@ -50,6 +50,7 @@ export const useSearchMovies = (
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setMovies([]);
     if (input) setIsLoading(true);
     else {
       setIsLoading(false);
