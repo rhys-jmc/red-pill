@@ -16,7 +16,7 @@ import { NotFoundScreen } from "../screens/not-found-screen";
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { LinkingConfiguration } from "./linking-configuration";
 
-import type { RootStackParamList } from "../types";
+import type { RootStackParamList } from "./types";
 import type { ColorSchemeName } from "react-native";
 
 export const Navigation = ({

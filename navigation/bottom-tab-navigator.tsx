@@ -10,7 +10,9 @@ import React, { useCallback } from "react";
 import { StyleSheet } from "react-native";
 
 import { theme } from "../constants/colors";
-import { useColorScheme } from "../hooks/use-color-scheme";
+import { useColorScheme } from "../hooks";
+import { MovieDetailScreen } from "../screens/movie-detail-screen";
+import { MovieSearchScreen } from "../screens/movie-search-screen";
 import { TabOneScreen } from "../screens/tab-one-screen";
 import { TabTwoScreen } from "../screens/tab-two-screen";
 
@@ -18,7 +20,7 @@ import type {
   BottomTabParamList,
   TabOneParamList,
   TabTwoParamList,
-} from "../types";
+} from "./types";
 import type { ComponentProps } from "react";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -71,6 +73,16 @@ const TabOneNavigator = (): JSX.Element => (
       name="TabOneScreen"
       component={TabOneScreen}
       options={{ headerTitle: "Tab One Title" }}
+    />
+    <TabOneStack.Screen
+      name="MovieSearchScreen"
+      component={MovieSearchScreen}
+      options={{ headerTitle: "Movie Search" }}
+    />
+    <TabOneStack.Screen
+      name="MovieDetailScreen"
+      component={MovieDetailScreen}
+      options={({ route: { params } }) => ({ headerTitle: params.movie.title })}
     />
   </TabOneStack.Navigator>
 );

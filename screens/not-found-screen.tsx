@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import { linkColor, white } from "../constants/colors";
 
-import type { RootStackParamList } from "../types";
+import type { RootStackParamList } from "../navigation/types";
 import type { StackScreenProps } from "@react-navigation/stack";
 
 export const NotFoundScreen = ({

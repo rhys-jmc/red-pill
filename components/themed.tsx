@@ -7,7 +7,7 @@ import React from "react";
 import { Text as DefaultText, View as DefaultView } from "react-native";
 
 import { theme } from "../constants/colors";
-import { useColorScheme } from "../hooks/use-color-scheme";
+import { useColorScheme } from "../hooks";
 
 export const useThemeColor = (
   props: { readonly light?: string; readonly dark?: string },
@@ -19,10 +19,7 @@ export const useThemeColor = (
   return colorFromProps ? colorFromProps : theme[scheme][colorName];
 };
 
-type ThemeProps = {
-  readonly lightColor?: string;
-  readonly darkColor?: string;
-};
+type ThemeProps = { readonly lightColor?: string; readonly darkColor?: string };
 
 export type TextProps = ThemeProps & DefaultText["props"];
 export type ViewProps = ThemeProps & DefaultView["props"];

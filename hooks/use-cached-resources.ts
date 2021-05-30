@@ -1,34 +1,25 @@
 import { Ionicons } from "@expo/vector-icons";
-import Font from "expo-font";
-import SplashScreen from "expo-splash-screen";
+import { loadAsync } from "expo-font";
+import { preventAutoHideAsync, hideAsync } from "expo-splash-screen";
 import { useCallback, useEffect, useState } from "react";
-
-import type { FontSource } from "expo-font";
 
 export const useCachedResources = (): boolean => {
   const [isLoadingComplete, setIsLoadingComplete] = useState(false);
 
-  const loadResourcesAndDataAsync = useCallback(
-    async (fontMap: { readonly [fontFamily: string]: FontSource }) =>
-      Promise.all([
-        SplashScreen.preventAutoHideAsync(),
-        Font.loadAsync(fontMap),
-      ]),
-    []
-  );
+  const loadResourcesAndDataAsync = useCallback(async () => {
+    await preventAutoHideAsync().catch(console.error);
+    await loadAsync({
+      ...Ionicons.font,
+      // eslint-disable-next-line unicorn/prefer-module
+      "space-mono": require("../assets/fonts/SpaceMono-Regular.ttf"),
+    }).catch(console.error);
+    await hideAsync().catch(console.error);
+    setIsLoadingComplete(true);
+  }, []);
 
   // Load any resources or data that we need prior to rendering the app
   useEffect(() => {
-    loadResourcesAndDataAsync({
-      ...Ionicons.font,
-      // eslint-disable-next-line unicorn/prefer-module
-      "space-mono": require("../assets/fonts/SpaceMono-regular.ttf"),
-    })
-      .finally(() => {
-        setIsLoadingComplete(true);
-        SplashScreen.hideAsync().catch(console.error);
-      })
-      .catch(console.error);
+    loadResourcesAndDataAsync().catch(console.error);
   }, []);
 
   return isLoadingComplete;

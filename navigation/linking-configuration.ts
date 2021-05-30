@@ -19,6 +19,8 @@ export const LinkingConfiguration = {
           },
           TabTwo: {
             screens: {
+              MovieDetailScreen: "movie-detail",
+              MovieSearchScreen: "movie-search",
               TabTwoScreen: "two",
             },
           },

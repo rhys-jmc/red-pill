@@ -3,6 +3,8 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
+import type { SearchMovieResult } from "../services/tmdb/types";
+
 export type RootStackParamList = {
   readonly Root: undefined;
   readonly NotFound: undefined;
@@ -14,6 +16,8 @@ export type BottomTabParamList = {
 };
 
 export type TabOneParamList = {
+  readonly MovieDetailScreen: { readonly movie: SearchMovieResult };
+  readonly MovieSearchScreen: undefined;
   readonly TabOneScreen: undefined;
 };
 

@@ -97,6 +97,7 @@ module.exports = defineConfig({
         ignoreAccessorPattern: ["module.exports", "**.current"],
       },
     ],
+    "functional/no-conditional-statement": "off",
     "functional/no-expression-statement": [
       "error",
       {

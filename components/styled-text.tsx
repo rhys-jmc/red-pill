@@ -9,4 +9,4 @@ export const MonoText = ({ style, ...props }: TextProps): JSX.Element => (
   <Text {...props} style={[style, styles.text]} />
 );
 
-const styles = StyleSheet.create({ text: { fontFamily: "space-memo" } });
+const styles = StyleSheet.create({ text: { fontFamily: "space-mono" } });
