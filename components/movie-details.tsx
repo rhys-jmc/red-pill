@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   facts: { fontSize: 16 },
   header: { alignItems: "center", flexDirection: "row", height: 168 },
   headerImageStyle: { opacity: 0.618 },
-  heading: { paddingHorizontal: 20, paddingVertical: 16, textAlign: "center" },
+  heading: { paddingHorizontal: 20, paddingVertical: 16 },
   info: { padding: 20 },
   overview: { fontSize: 16 },
   overviewHeading: { fontSize: 20, fontWeight: "600", marginVertical: 10 },
