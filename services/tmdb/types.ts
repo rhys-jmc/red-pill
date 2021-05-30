@@ -7,7 +7,7 @@ type BaseMovie = {
   readonly overview: string;
   readonly popularity: number;
   readonly poster_path: string | null;
-  readonly release_date: string;
+  readonly release_date: string | undefined;
   readonly title: string;
   readonly video: boolean;
   readonly vote_average: number;

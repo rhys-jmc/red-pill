@@ -51,6 +51,10 @@ export const useSearchMovies = (
 
   useEffect(() => {
     if (input) setIsLoading(true);
+    else {
+      setIsLoading(false);
+      setMovies([]);
+    }
   }, [input]);
 
   useEffect(() => {
@@ -73,18 +77,15 @@ export const useSearchMovies = (
       .catch(console.error);
 
     return () => cancelQuery(source, setIsLoading);
-  }, [input]);
+  }, [query]);
 
   return { movies, isLoading };
 };
 
 const cancelQuery = (
   source: CancelTokenSource,
-  // eslint-disable-next-line functional/no-return-void
   setIsLoading: (isLoading: boolean) => void
-  // eslint-disable-next-line functional/no-return-void
 ): void => {
+  source.cancel();
   setIsLoading(false);
-
-  return source.cancel();
 };

@@ -6,83 +6,58 @@
 import { Ionicons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import React, { useCallback } from "react";
-import { StyleSheet } from "react-native";
+import React from "react";
 
-import { theme } from "../constants/colors";
+import { theme } from "../constants";
 import { useColorScheme } from "../hooks";
-import { MovieDetailScreen } from "../screens/movie-detail-screen";
-import { MovieSearchScreen } from "../screens/movie-search-screen";
-import { TabOneScreen } from "../screens/tab-one-screen";
+import { DiscoverScreen } from "../screens/discover-screen";
 import { TabTwoScreen } from "../screens/tab-two-screen";
 
 import type {
   BottomTabParamList,
-  TabOneParamList,
+  DiscoverParamList,
   TabTwoParamList,
 } from "./types";
-import type { ComponentProps } from "react";
+import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
-export const BottomTabNavigator = (): JSX.Element => {
-  const colorScheme = useColorScheme();
+const discoverTabBarIcon: BottomTabNavigationOptions["tabBarIcon"] = (
+  props
+) => <Ionicons name="search-outline" {...props} />;
 
-  const tabBarIcon = useCallback(
-    ({ color }) => <TabBarIcon name="ios-code" color={color} />,
-    []
-  );
+const listTabBarIcon: BottomTabNavigationOptions["tabBarIcon"] = (props) => (
+  <Ionicons name="list-outline" {...props} />
+);
 
-  return (
-    <BottomTab.Navigator
-      initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: theme[colorScheme].tint }}
-    >
-      <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
-        options={{ tabBarIcon }}
-      />
-      <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
-        options={{ tabBarIcon }}
-      />
-    </BottomTab.Navigator>
-  );
-};
-
-type TabBarIconProps = {
-  readonly name: ComponentProps<typeof Ionicons>["name"];
-  readonly color: string;
-};
-
-// You can explore the built-in icon families and icons on the web at:
-// https://icons.expo.fyi/
-const TabBarIcon = (props: TabBarIconProps): JSX.Element => (
-  <Ionicons size={30} style={styles.tabBarIcon} {...props} />
+export const BottomTabNavigator = (): JSX.Element => (
+  <BottomTab.Navigator
+    initialRouteName="Discover"
+    tabBarOptions={{ activeTintColor: theme[useColorScheme()].tint }}
+  >
+    <BottomTab.Screen
+      name="Discover"
+      component={DiscoverNavigator}
+      options={{ tabBarIcon: discoverTabBarIcon }}
+    />
+    <BottomTab.Screen
+      name="TabTwo"
+      component={TabTwoNavigator}
+      options={{ tabBarIcon: listTabBarIcon }}
+    />
+  </BottomTab.Navigator>
 );
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const TabOneStack = createStackNavigator<DiscoverParamList>();
 
-const TabOneNavigator = (): JSX.Element => (
+const DiscoverNavigator = (): JSX.Element => (
   <TabOneStack.Navigator>
     <TabOneStack.Screen
-      name="TabOneScreen"
-      component={TabOneScreen}
-      options={{ headerTitle: "Tab One Title" }}
-    />
-    <TabOneStack.Screen
-      name="MovieSearchScreen"
-      component={MovieSearchScreen}
-      options={{ headerTitle: "Movie Search" }}
-    />
-    <TabOneStack.Screen
-      name="MovieDetailScreen"
-      component={MovieDetailScreen}
-      options={({ route: { params } }) => ({ headerTitle: params.movie.title })}
+      name="DiscoverScreen"
+      component={DiscoverScreen}
+      options={{ headerTitle: "Discover" }}
     />
   </TabOneStack.Navigator>
 );
@@ -98,5 +73,3 @@ const TabTwoNavigator = (): JSX.Element => (
     />
   </TabTwoStack.Navigator>
 );
-
-const styles = StyleSheet.create({ tabBarIcon: { marginBottom: -3 } });

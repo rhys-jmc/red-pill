@@ -7,23 +7,23 @@ import {
   StyleSheet,
 } from "react-native";
 
-import { Text, View } from "../components/themed";
 import { useMovie } from "../services/tmdb/hooks";
 
-import type { TabOneParamList } from "../navigation/types";
-import type { StackScreenProps } from "@react-navigation/stack";
+import { Text, View } from "./themed";
+
+import type { SearchMovieResult } from "../services/tmdb/types";
 
 const getImageUri = (path: string, variant: "poster" | "backdrop"): string =>
   `https://themoviedb.org/t/p/${
     variant === "poster" ? "w600_and_h900_bestv2" : "w1000_and_h450_multi_faces"
   }${path}`;
 
-export const MovieDetailScreen = ({
-  route: { params },
-}: StackScreenProps<TabOneParamList, "MovieDetailScreen">): JSX.Element => {
-  const { isLoading, ...result } = useMovie(params.movie.id);
+export const MovieDetails = (props: {
+  readonly movie: SearchMovieResult;
+}): JSX.Element => {
+  const { isLoading, ...result } = useMovie(props.movie.id);
 
-  const movie = { ...params.movie, ...result.movie };
+  const movie = { ...props.movie, ...result.movie };
 
   return (
     <View style={styles.container}>
@@ -46,14 +46,18 @@ export const MovieDetailScreen = ({
       <View style={styles.details}>
         <Text style={styles.heading}>
           <Text style={styles.title}>{movie.title} </Text>
-          <Text style={styles.year}>
-            ({new Date(movie.release_date).getFullYear()})
-          </Text>
+          {movie.release_date && (
+            <Text style={styles.year}>
+              ({new Date(movie.release_date).getFullYear()})
+            </Text>
+          )}
         </Text>
         <Text style={styles.score}>{movie.vote_average * 10}% User Score</Text>
         <View>
           <Text style={styles.facts}>
-            <Text>{format(new Date(movie.release_date), "dd/MM/yyyy")}</Text>
+            {movie.release_date && (
+              <Text>{format(new Date(movie.release_date), "dd/MM/yyyy")}</Text>
+            )}
             {"runtime" in movie && movie.runtime && (
               <Text>
                 {" "}

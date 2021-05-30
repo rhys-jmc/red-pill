@@ -1,8 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 
-import { EditScreenInfo } from "../components/edit-screen-info";
-import { Text, View } from "../components/themed";
+import { Text, View, EditScreenInfo } from "../components";
 
 export const TabTwoScreen = (): JSX.Element => (
   <View style={styles.container}>

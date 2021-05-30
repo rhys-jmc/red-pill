@@ -2,7 +2,7 @@ import { openBrowserAsync } from "expo-web-browser";
 import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 
-import { theme } from "../constants/colors";
+import { theme } from "../constants";
 
 import { MonoText } from "./styled-text";
 import { Text, View } from "./themed";

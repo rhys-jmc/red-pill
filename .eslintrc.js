@@ -98,19 +98,8 @@ module.exports = defineConfig({
       },
     ],
     "functional/no-conditional-statement": "off",
-    "functional/no-expression-statement": [
-      "error",
-      {
-        ignorePattern: [
-          "module.exports",
-          "ReactDOM.render",
-          "console",
-          "event.preventDefault",
-          "useEffect",
-          "set",
-        ],
-      },
-    ],
+    "functional/no-expression-statement": "off",
+    "functional/no-return-void": "off",
 
     "import/order": [
       "error",
@@ -143,10 +132,11 @@ module.exports = defineConfig({
 
     "security/detect-object-injection": "off",
 
+    "unicorn/no-useless-undefined": "off",
     "unicorn/prefer-node-protocol": "off",
     "unicorn/prevent-abbreviations": [
       "error",
-      { ignore: [/dir/i, /param/i, /props/i] },
+      { ignore: [/dir/i, /param/i, /props/i, /ref/i] },
     ],
   },
   overrides: [

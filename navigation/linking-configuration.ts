@@ -14,13 +14,13 @@ export const LinkingConfiguration = {
         screens: {
           TabOne: {
             screens: {
+              DiscoverScreen: "discover-screen",
+              MovieDetailScreen: "movie-detail",
               TabOneScreen: "one",
             },
           },
           TabTwo: {
             screens: {
-              MovieDetailScreen: "movie-detail",
-              MovieSearchScreen: "movie-search",
               TabTwoScreen: "two",
             },
           },

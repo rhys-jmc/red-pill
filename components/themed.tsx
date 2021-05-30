@@ -6,18 +6,7 @@
 import React from "react";
 import { Text as DefaultText, View as DefaultView } from "react-native";
 
-import { theme } from "../constants/colors";
-import { useColorScheme } from "../hooks";
-
-export const useThemeColor = (
-  props: { readonly light?: string; readonly dark?: string },
-  colorName: keyof typeof theme.light & keyof typeof theme.dark
-): string => {
-  const scheme = useColorScheme();
-  const colorFromProps = props[scheme];
-
-  return colorFromProps ? colorFromProps : theme[scheme][colorName];
-};
+import { useThemeColor } from "../hooks";
 
 type ThemeProps = { readonly lightColor?: string; readonly darkColor?: string };
 
