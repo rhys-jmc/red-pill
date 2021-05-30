@@ -1,0 +1,5 @@
+.gitignore
+.prettierignore
+pre-commit
+*.snap
+yarn.lock
