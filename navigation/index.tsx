@@ -11,6 +11,7 @@ import {
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 
+import { UpNextProvider } from "../context/up-next";
 import { NotFoundScreen } from "../screens/not-found-screen";
 
 import { BottomTabNavigator } from "./bottom-tab-navigator";
@@ -37,12 +38,14 @@ export const Navigation = ({
 const Stack = createStackNavigator<RootStackParamList>();
 
 const RootNavigator = (): JSX.Element => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="Root" component={BottomTabNavigator} />
-    <Stack.Screen
-      name="NotFound"
-      component={NotFoundScreen}
-      options={{ title: "Oops!" }}
-    />
-  </Stack.Navigator>
+  <UpNextProvider>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Root" component={BottomTabNavigator} />
+      <Stack.Screen
+        name="NotFound"
+        component={NotFoundScreen}
+        options={{ title: "Oops!" }}
+      />
+    </Stack.Navigator>
+  </UpNextProvider>
 );

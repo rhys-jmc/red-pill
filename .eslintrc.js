@@ -99,6 +99,7 @@ module.exports = defineConfig({
     ],
     "functional/no-conditional-statement": "off",
     "functional/no-expression-statement": "off",
+    "functional/no-throw-statement": "off",
     "functional/no-return-void": "off",
 
     "import/order": [
@@ -134,11 +135,12 @@ module.exports = defineConfig({
 
     "security/detect-object-injection": "off",
 
+    "unicorn/no-array-callback-reference": "off",
     "unicorn/no-useless-undefined": "off",
     "unicorn/prefer-node-protocol": "off",
     "unicorn/prevent-abbreviations": [
       "error",
-      { ignore: [/dir/i, /param/i, /props/i, /ref/i] },
+      { ignore: [/dir/i, /param/i, /prev/i, /props/i, /ref/i] },
     ],
   },
   overrides: [

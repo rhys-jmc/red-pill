@@ -10,6 +10,7 @@ import {
 import { getTmdbImageUri, useMovie } from "../services/tmdb";
 
 import { ThemedText, ThemedView } from "./themed";
+import { UpNextButton } from "./up-next-button";
 
 import type { SearchMovieResult } from "../services/tmdb";
 
@@ -17,7 +18,6 @@ export const MovieDetails = (props: {
   readonly movie: SearchMovieResult;
 }): JSX.Element => {
   const { isLoading, ...result } = useMovie(props.movie.id);
-
   const movie = { ...props.movie, ...result.movie };
 
   return (
@@ -50,7 +50,7 @@ export const MovieDetails = (props: {
         <ThemedText style={styles.score}>
           {`${movie.vote_average * 10}% User Score`}
         </ThemedText>
-        <ThemedView>
+        <ThemedView style={styles.factsContainer}>
           <ThemedText style={styles.facts}>
             {movie.release_date && (
               <ThemedText>
@@ -65,14 +65,10 @@ export const MovieDetails = (props: {
           </ThemedText>
           {"genres" in movie && (
             <ThemedText style={styles.facts}>
-              {movie.genres.map((g, index, array) => (
-                <ThemedText key={g.id}>
-                  {g.name}
-                  {index !== array.length - 1 && ", "}
-                </ThemedText>
-              ))}
+              {movie.genres.map((g) => g.name).join(", ")}
             </ThemedText>
           )}
+          <UpNextButton movieId={movie.id} />
         </ThemedView>
       </ThemedView>
       <ThemedView style={styles.info}>
@@ -90,6 +86,7 @@ const styles = StyleSheet.create({
   container: { alignItems: "stretch" },
   details: { alignItems: "center", paddingHorizontal: 20 },
   facts: { fontSize: 16 },
+  factsContainer: { alignItems: "center" },
   header: { alignItems: "center", flexDirection: "row", height: 168 },
   headerImageStyle: { opacity: 0.618 },
   heading: { paddingHorizontal: 20, paddingVertical: 16 },

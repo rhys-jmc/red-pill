@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { useDebounce } from "../../hooks";
 
@@ -7,6 +7,19 @@ import { API_KEY_PARAM, API_URL } from "./constants";
 
 import type { Movie, SearchMovieData } from "./types";
 import type { CancelTokenSource } from "axios";
+
+const getMovie = async ({
+  movieId,
+  source,
+}: {
+  readonly movieId: number;
+  readonly source: CancelTokenSource;
+}): Promise<Movie> =>
+  (
+    await axios.get<Movie>(`${API_URL}/movie/${movieId}?${API_KEY_PARAM}`, {
+      cancelToken: source.token,
+    })
+  ).data;
 
 export const useMovie = (
   movieId?: number
@@ -23,10 +36,10 @@ export const useMovie = (
 
     const source = axios.CancelToken.source();
 
-    setIsLoading(true);
-
     axios
-      .get<Movie>(`${API_URL}/movie/${movieId}?${API_KEY_PARAM}`)
+      .get<Movie>(`${API_URL}/movie/${movieId}?${API_KEY_PARAM}`, {
+        cancelToken: source.token,
+      })
       .then(({ data }) => {
         setMovie(data);
         setIsLoading(false);
@@ -34,10 +47,43 @@ export const useMovie = (
       })
       .catch(console.error);
 
-    return () => cancelQuery(source, setIsLoading);
+    return source.cancel;
   }, [movieId]);
 
   return { movie, isLoading };
+};
+
+export const useMovies = (
+  movieIds: readonly number[]
+): { readonly movies: readonly Movie[]; readonly isLoading: boolean } => {
+  const [movies, setMovies] = useState<readonly Movie[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setMovies([]);
+    if (movieIds.length > 0) setIsLoading(true);
+    else setIsLoading(false);
+  }, [movieIds]);
+
+  const loadMovies = useCallback((movies: readonly Movie[]) => {
+    setMovies(movies);
+    setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
+    const items = movieIds.map((movieId) => ({
+      movieId,
+      source: axios.CancelToken.source(),
+    }));
+
+    Promise.all(items.map(getMovie)).then(loadMovies).catch(console.error);
+
+    return () => {
+      items.map(({ source }) => source.cancel());
+    };
+  }, [movieIds]);
+
+  return { movies, isLoading };
 };
 
 type Result = SearchMovieData["results"][number];
@@ -52,10 +98,7 @@ export const useSearchMovies = (
   useEffect(() => {
     setMovies([]);
     if (input) setIsLoading(true);
-    else {
-      setIsLoading(false);
-      setMovies([]);
-    }
+    else setIsLoading(false);
   }, [input]);
 
   useEffect(() => {
@@ -77,16 +120,8 @@ export const useSearchMovies = (
       })
       .catch(console.error);
 
-    return () => cancelQuery(source, setIsLoading);
+    return source.cancel;
   }, [query]);
 
   return { movies, isLoading };
-};
-
-const cancelQuery = (
-  source: CancelTokenSource,
-  setIsLoading: (isLoading: boolean) => void
-): void => {
-  source.cancel();
-  setIsLoading(false);
 };
