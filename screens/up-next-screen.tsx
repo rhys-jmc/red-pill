@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 
 import { ThemedText, ThemedView, EditScreenInfo } from "../components";
 
-export const TabTwoScreen = (): JSX.Element => (
+export const UpNextScreen = (): JSX.Element => (
   <ThemedView style={styles.container}>
     <ThemedText style={styles.title}>{"Tab Two"}</ThemedText>
     <ThemedView

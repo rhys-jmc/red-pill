@@ -11,12 +11,12 @@ import React from "react";
 import { theme } from "../constants";
 import { useColorScheme } from "../hooks";
 import { DiscoverScreen } from "../screens/discover-screen";
-import { TabTwoScreen } from "../screens/tab-two-screen";
+import { UpNextScreen } from "../screens/up-next-screen";
 
 import type {
   BottomTabParamList,
   DiscoverParamList,
-  TabTwoParamList,
+  UpNextParamList,
 } from "./types";
 import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 
@@ -41,35 +41,35 @@ export const BottomTabNavigator = (): JSX.Element => (
       options={{ tabBarIcon: discoverTabBarIcon }}
     />
     <BottomTab.Screen
-      name="TabTwo"
-      component={TabTwoNavigator}
-      options={{ tabBarIcon: listTabBarIcon }}
+      name="UpNext"
+      component={UpNextNavigator}
+      options={{ tabBarIcon: listTabBarIcon, tabBarLabel: "Up Next" }}
     />
   </BottomTab.Navigator>
 );
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<DiscoverParamList>();
+const DiscoverStack = createStackNavigator<DiscoverParamList>();
 
 const DiscoverNavigator = (): JSX.Element => (
-  <TabOneStack.Navigator>
-    <TabOneStack.Screen
+  <DiscoverStack.Navigator>
+    <DiscoverStack.Screen
       name="DiscoverScreen"
       component={DiscoverScreen}
       options={{ headerTitle: "Discover" }}
     />
-  </TabOneStack.Navigator>
+  </DiscoverStack.Navigator>
 );
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const UpNextStack = createStackNavigator<UpNextParamList>();
 
-const TabTwoNavigator = (): JSX.Element => (
-  <TabTwoStack.Navigator>
-    <TabTwoStack.Screen
-      name="TabTwoScreen"
-      component={TabTwoScreen}
-      options={{ headerTitle: "Tab Two Title" }}
+const UpNextNavigator = (): JSX.Element => (
+  <UpNextStack.Navigator>
+    <UpNextStack.Screen
+      name="UpNextScreen"
+      component={UpNextScreen}
+      options={{ headerTitle: "Up Next" }}
     />
-  </TabTwoStack.Navigator>
+  </UpNextStack.Navigator>
 );
