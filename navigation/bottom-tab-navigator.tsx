@@ -10,8 +10,7 @@ import React from "react";
 
 import { theme } from "../constants";
 import { useColorScheme } from "../hooks";
-import { DiscoverScreen } from "../screens/discover-screen";
-import { UpNextScreen } from "../screens/up-next-screen";
+import { DiscoverScreen, MovieDetailsScreen, UpNextScreen } from "../screens";
 
 import type {
   BottomTabParamList,
@@ -70,6 +69,10 @@ const UpNextNavigator = (): JSX.Element => (
       name="UpNextScreen"
       component={UpNextScreen}
       options={{ headerTitle: "Up Next" }}
+    />
+    <UpNextStack.Screen
+      name="MovieDetailsScreen"
+      component={MovieDetailsScreen}
     />
   </UpNextStack.Navigator>
 );

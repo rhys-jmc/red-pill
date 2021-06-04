@@ -1,86 +1,73 @@
 import { format } from "date-fns";
 import React from "react";
-import {
-  ActivityIndicator,
-  Image,
-  ImageBackground,
-  StyleSheet,
-} from "react-native";
+import { ImageBackground, StyleSheet } from "react-native";
 
-import { getTmdbImageUri, useMovie } from "../services/tmdb";
+import { getTmdbImageUri } from "../services/tmdb";
 
+import { Poster } from "./poster";
 import { ThemedText, ThemedView } from "./themed";
 import { UpNextButton } from "./up-next-button";
 
-import type { SearchMovieResult } from "../services/tmdb";
+import type { Movie } from "../services/tmdb";
 
-export const MovieDetails = (props: {
-  readonly movie: SearchMovieResult;
-}): JSX.Element => {
-  const { isLoading, ...result } = useMovie(props.movie.id);
-  const movie = { ...props.movie, ...result.movie };
-
-  return (
-    <ThemedView style={styles.container}>
-      {isLoading && <ActivityIndicator />}
-      <ImageBackground
-        source={{ uri: getTmdbImageUri(movie.backdrop_path ?? "", "backdrop") }}
-        resizeMode="cover"
-        style={styles.header}
-        imageStyle={styles.headerImageStyle}
-      >
-        {movie.poster_path && (
-          <Image
-            source={{ uri: getTmdbImageUri(movie.poster_path, "poster") }}
-            style={styles.poster}
-            accessibilityIgnoresInvertColors
-            resizeMode="contain"
-          />
+export const MovieDetails = ({
+  movie,
+}: {
+  readonly movie: Movie;
+}): JSX.Element => (
+  <ThemedView style={styles.container}>
+    <ImageBackground
+      source={{
+        uri: getTmdbImageUri(movie.backdrop_path ?? "", "backdrop"),
+      }}
+      resizeMode="cover"
+      style={styles.header}
+      imageStyle={styles.headerImageStyle}
+    >
+      {movie.poster_path && (
+        <Poster path={movie.poster_path} style={styles.poster} />
+      )}
+    </ImageBackground>
+    <ThemedView style={styles.details}>
+      <ThemedText style={styles.heading}>
+        <ThemedText style={styles.title}>{movie.title}</ThemedText>
+        {movie.release_date && (
+          <ThemedText style={styles.year}>
+            {` (${new Date(movie.release_date).getFullYear()})`}
+          </ThemedText>
         )}
-      </ImageBackground>
-      <ThemedView style={styles.details}>
-        <ThemedText style={styles.heading}>
-          <ThemedText style={styles.title}>{movie.title}</ThemedText>
-          {movie.release_date && (
-            <ThemedText style={styles.year}>
-              {` (${new Date(movie.release_date).getFullYear()})`}
-            </ThemedText>
-          )}
-        </ThemedText>
+      </ThemedText>
+      {movie.vote_average !== undefined && (
         <ThemedText style={styles.score}>
           {`${movie.vote_average * 10}% User Score`}
         </ThemedText>
-        <ThemedView style={styles.factsContainer}>
-          <ThemedText style={styles.facts}>
-            {movie.release_date && (
-              <ThemedText>
-                {format(new Date(movie.release_date), "dd/MM/yyyy")}
-              </ThemedText>
-            )}
-            {"runtime" in movie && movie.runtime && (
-              <ThemedText>
-                {` - ${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m`}
-              </ThemedText>
-            )}
-          </ThemedText>
-          {"genres" in movie && (
-            <ThemedText style={styles.facts}>
-              {movie.genres.map((g) => g.name).join(", ")}
+      )}
+      <ThemedView style={styles.factsContainer}>
+        <ThemedText style={styles.facts}>
+          {movie.release_date && (
+            <ThemedText>
+              {format(new Date(movie.release_date), "dd/MM/yyyy")}
             </ThemedText>
           )}
-          <UpNextButton movieId={movie.id} />
-        </ThemedView>
-      </ThemedView>
-      <ThemedView style={styles.info}>
-        {"tagline" in movie && (
-          <ThemedText style={styles.tagline}>{movie.tagline}</ThemedText>
-        )}
-        <ThemedText style={styles.overviewHeading}>{"Overview"}</ThemedText>
-        <ThemedText style={styles.overview}>{movie.overview}</ThemedText>
+          {movie.runtime && (
+            <ThemedText>
+              {` - ${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m`}
+            </ThemedText>
+          )}
+        </ThemedText>
+        <ThemedText style={styles.facts}>
+          {movie.genres.map((g) => g.name).join(", ")}
+        </ThemedText>
+        {movie.id && <UpNextButton movieId={movie.id} />}
       </ThemedView>
     </ThemedView>
-  );
-};
+    <ThemedView style={styles.info}>
+      <ThemedText style={styles.tagline}>{movie.tagline}</ThemedText>
+      <ThemedText style={styles.overviewHeading}>{"Overview"}</ThemedText>
+      <ThemedText style={styles.overview}>{movie.overview}</ThemedText>
+    </ThemedView>
+  </ThemedView>
+);
 
 const styles = StyleSheet.create({
   container: { alignItems: "stretch" },
@@ -93,7 +80,7 @@ const styles = StyleSheet.create({
   info: { padding: 20 },
   overview: { fontSize: 16 },
   overviewHeading: { fontSize: 20, fontWeight: "600", marginVertical: 10 },
-  poster: { borderRadius: 4, height: 128, marginHorizontal: 20, width: 85 },
+  poster: { marginHorizontal: 20 },
   score: { fontSize: 16, fontWeight: "700" },
   tagline: {
     fontSize: 18,

@@ -12,7 +12,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 
 import { UpNextProvider } from "../context/up-next";
-import { NotFoundScreen } from "../screens/not-found-screen";
+import { NotFoundScreen } from "../screens";
 
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { LinkingConfiguration } from "./linking-configuration";

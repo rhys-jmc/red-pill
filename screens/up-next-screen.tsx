@@ -1,24 +1,59 @@
 import React from "react";
-import { ActivityIndicator, StyleSheet } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 
-import { ThemedText, ThemedView } from "../components";
+import { Poster, ThemedView } from "../components";
 import { useUpNext } from "../context/up-next";
+import { useLayout } from "../hooks";
 import { useMovies } from "../services/tmdb";
 
-export const UpNextScreen = (): JSX.Element => {
+import type { UpNextParamList } from "../navigation/types";
+import type { StackScreenProps } from "@react-navigation/stack";
+
+export const UpNextScreen = ({
+  navigation: { navigate },
+}: StackScreenProps<UpNextParamList, "UpNextScreen">): JSX.Element => {
   const upNext = useUpNext();
   const { movies, isLoading } = useMovies(upNext.list);
+  const { window } = useLayout();
+  const posterWidth = (window.width - 20) / 3 - 20;
 
   return (
     <ThemedView style={styles.container}>
-      {isLoading && <ActivityIndicator />}
-      {movies.map((m) => (
-        <ThemedView key={m.id}>
-          <ThemedText>{m.title}</ThemedText>
+      <ScrollView>
+        {isLoading && <ActivityIndicator size="large" />}
+        <ThemedView style={styles.posters}>
+          {movies.map((m) => (
+            <TouchableOpacity
+              key={m.id}
+              onPress={() => navigate("MovieDetailsScreen", { movieId: m.id })}
+            >
+              <Poster
+                path={m.poster_path ?? ""}
+                width={posterWidth}
+                style={styles.poster}
+              />
+            </TouchableOpacity>
+          ))}
         </ThemedView>
-      ))}
+      </ScrollView>
     </ThemedView>
   );
 };
 
-const styles = StyleSheet.create({ container: { flex: 1 } });
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+  poster: { marginBottom: 20, marginLeft: 20 },
+  posters: {
+    alignItems: "flex-start",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+    marginRight: 20,
+    marginTop: 20,
+  },
+});

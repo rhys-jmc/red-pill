@@ -66,7 +66,7 @@ export const useMovies = (
   }, [movieIds]);
 
   const loadMovies = useCallback((movies: readonly Movie[]) => {
-    setMovies(movies);
+    setMovies([...movies].sort((a, b) => a.title.localeCompare(b.title)));
     setIsLoading(false);
   }, []);
 

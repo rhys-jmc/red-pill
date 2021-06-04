@@ -17,4 +17,5 @@ export type DiscoverParamList = { readonly DiscoverScreen: undefined };
 
 export type UpNextParamList = {
   readonly UpNextScreen: undefined;
+  readonly MovieDetailsScreen: { readonly movieId: number };
 };

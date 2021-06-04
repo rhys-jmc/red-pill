@@ -6,22 +6,23 @@
 
 import { makeUrl } from "expo-linking";
 
-export const LinkingConfiguration = {
+import type { LinkingOptions } from "@react-navigation/native";
+
+export const LinkingConfiguration: LinkingOptions = {
   prefixes: [makeUrl("/")],
   config: {
     screens: {
       Root: {
         screens: {
-          TabOne: {
+          Discover: {
             screens: {
               DiscoverScreen: "discover-screen",
-              MovieDetailScreen: "movie-detail",
-              TabOneScreen: "one",
             },
           },
-          TabTwo: {
+          UpNext: {
             screens: {
-              TabTwoScreen: "two",
+              UpNextScreen: "up-next",
+              MovieDetailsScreen: "movie",
             },
           },
         },
