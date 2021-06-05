@@ -4,7 +4,7 @@ import React from "react";
 import { MonoText } from "./styled-text";
 
 it(`renders correctly`, () => {
-  const { toJSON } = render(<MonoText>Snapshot test!</MonoText>);
+  const { toJSON } = render(<MonoText>{"Snapshot test!"}</MonoText>);
 
   expect(toJSON()).toMatchSnapshot();
 });
