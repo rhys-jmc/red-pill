@@ -1,4 +1,4 @@
-export const getTmdbImageUri = (
+export const getImageUri = (
   path: string,
   variant: "poster" | "backdrop"
 ): string =>

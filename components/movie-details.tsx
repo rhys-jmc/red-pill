@@ -2,9 +2,10 @@ import { format } from "date-fns";
 import React from "react";
 import { ImageBackground, StyleSheet } from "react-native";
 
-import { getTmdbImageUri } from "../services/tmdb";
+import { getImageUri } from "../services/tmdb";
 
 import { BlockedButton } from "./blocked-button";
+import { ImdbButton } from "./imdb-button";
 import { Poster } from "./poster";
 import { ThemedText, ThemedView } from "./themed";
 import { UpNextButton } from "./up-next-button";
@@ -17,10 +18,10 @@ export const MovieDetails = ({
 }: {
   readonly movie: Movie;
 }): JSX.Element => (
-  <ThemedView style={styles.container}>
+  <ThemedView>
     <ImageBackground
       source={{
-        uri: getTmdbImageUri(movie.backdrop_path ?? "", "backdrop"),
+        uri: getImageUri(movie.backdrop_path ?? "", "backdrop"),
       }}
       resizeMode="cover"
       style={styles.header}
@@ -70,11 +71,11 @@ export const MovieDetails = ({
       <ThemedText style={styles.overviewHeading}>{"Overview"}</ThemedText>
       <ThemedText style={styles.overview}>{movie.overview}</ThemedText>
     </ThemedView>
+    {movie.imdb_id && <ImdbButton imdbId={movie.imdb_id} />}
   </ThemedView>
 );
 
 const styles = StyleSheet.create({
-  container: { alignItems: "stretch" },
   details: { alignItems: "center", paddingHorizontal: 20 },
   facts: { fontSize: 16 },
   factsContainer: { alignItems: "center" },

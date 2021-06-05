@@ -12,7 +12,7 @@ import {
 } from "react-native";
 
 import { useThemeColor } from "../hooks";
-import { getTmdbImageUri, useSearchMovies } from "../services/tmdb";
+import { getImageUri, useSearchMovies } from "../services/tmdb";
 
 import { ThemedText, ThemedView } from "./themed";
 
@@ -106,7 +106,7 @@ export const MovieSearch = ({
                     <ThemedView>
                       <ImageBackground
                         source={{
-                          uri: getTmdbImageUri(
+                          uri: getImageUri(
                             movie.backdrop_path ?? "",
                             "backdrop"
                           ),

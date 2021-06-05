@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, StyleSheet } from "react-native";
 
-import { getTmdbImageUri } from "../services/tmdb";
+import { getImageUri } from "../services/tmdb";
 
 import type { ComponentProps } from "react";
 
@@ -15,7 +15,7 @@ export const Poster = ({
   readonly width?: number;
 }): JSX.Element => (
   <Image
-    source={{ uri: getTmdbImageUri(path, "poster") }}
+    source={{ uri: getImageUri(path, "poster") }}
     style={[styles.poster, ...(Array.isArray(style) ? style : [style])]}
     accessibilityIgnoresInvertColors
     resizeMode="contain"
