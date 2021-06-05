@@ -11,7 +11,7 @@ import {
 } from "react-native";
 
 import { useThemeColor } from "../hooks";
-import { useSearchMovies } from "../services/tmdb";
+import { useSearchMulti } from "../services/tmdb";
 
 import { BlockedButton } from "./blocked-button";
 import { Poster } from "./poster";
@@ -29,7 +29,7 @@ export const MovieSearch = ({
   const textInputRef = useRef<TextInput>(null);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [input, setInput] = useState<string>("");
-  const { movies, isLoading } = useSearchMovies(input);
+  const { movies, isLoading } = useSearchMulti(input);
   const color = useThemeColor({}, "text");
   const focusTextInput = (): void => textInputRef.current?.focus();
   const shouldShowPlaceholder = !isFocused && !input;

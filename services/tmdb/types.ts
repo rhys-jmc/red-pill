@@ -18,9 +18,9 @@ export type SearchMovieResult = BaseMovie & {
   readonly genre_ids: readonly number[];
 };
 
-export type SearchMovieData = {
+type ResultsData<T> = {
   readonly page: number;
-  readonly results: readonly SearchMovieResult[];
+  readonly results: readonly T[];
   readonly total_results: number;
   readonly total_pages: number;
 };
@@ -53,3 +53,44 @@ export type Movie = BaseMovie & {
     | "Cancelled";
   readonly tagline: string | null;
 };
+
+export type SearchMultiMovieResult = SearchMovieResult & {
+  readonly media_type: "movie";
+};
+
+type SearchMultiTvResult = Pick<
+  SearchMovieResult,
+  | "poster_path"
+  | "popularity"
+  | "id"
+  | "overview"
+  | "backdrop_path"
+  | "vote_average"
+  | "genre_ids"
+  | "original_language"
+  | "vote_count"
+> & {
+  readonly media_type: "tv";
+  readonly first_air_date: string;
+  readonly origin_country: readonly string[];
+  readonly name: string;
+  readonly original_name: string;
+};
+
+export type SearchMultiPersonResult = {
+  readonly profile_path: string | null;
+  readonly adult: boolean;
+  readonly id: number;
+  readonly media_type: "person";
+  readonly name: string;
+  readonly popularity: string;
+  readonly known_for: readonly (SearchMultiMovieResult | SearchMultiTvResult)[];
+};
+
+export type SearchMultiResult =
+  | SearchMultiMovieResult
+  | SearchMultiTvResult
+  | SearchMultiPersonResult;
+
+export type SearchMovieData = ResultsData<SearchMovieResult>;
+export type SearchMultiData = ResultsData<SearchMultiResult>;

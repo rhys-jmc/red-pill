@@ -5,16 +5,21 @@ import { useBlocked, useWatched } from "../../../context";
 import { useDebounce } from "../../../hooks";
 import { API_URL, API_KEY_PARAM } from "../constants";
 
-import type { SearchMovieData, SearchMovieResult } from "../types";
+import type {
+  SearchMultiData,
+  SearchMultiMovieResult,
+  SearchMultiPersonResult,
+  SearchMultiResult,
+} from "../types";
 
-export const useSearchMovies = (
+export const useSearchMulti = (
   input: string
 ): {
-  readonly movies: readonly SearchMovieResult[];
+  readonly movies: readonly SearchMultiMovieResult[];
   readonly isLoading: boolean;
 } => {
   const query = useDebounce(input);
-  const [movies, setMovies] = useState<readonly SearchMovieResult[]>([]);
+  const [movies, setMovies] = useState<readonly SearchMultiMovieResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { isBlocked } = useBlocked();
   const { hasWatched } = useWatched();
@@ -31,14 +36,17 @@ export const useSearchMovies = (
     const source = axios.CancelToken.source();
 
     axios
-      .get<SearchMovieData>(
-        `${API_URL}/search/movie?query=${encodeURIComponent(
+      .get<SearchMultiData>(
+        `${API_URL}/search/multi?query=${encodeURIComponent(
           input
         )}&${API_KEY_PARAM}`,
         { cancelToken: source.token }
       )
       .then(({ data: { results } }) => {
-        setMovies(results);
+        const movies = results
+          .filter(isMovieOrPerson)
+          .flatMap((r) => (isMovie(r) ? r : r.known_for.filter(isMovie)));
+        setMovies(movies);
         setIsLoading(false);
         return results;
       })
@@ -52,3 +60,15 @@ export const useSearchMovies = (
     isLoading,
   };
 };
+
+const isMovieOrPerson = (
+  result: SearchMultiResult
+): result is SearchMultiMovieResult | SearchMultiPersonResult =>
+  isMovie(result) || isPerson(result);
+
+const isMovie = (result: SearchMultiResult): result is SearchMultiMovieResult =>
+  result.media_type === "movie";
+
+const isPerson = (
+  result: SearchMultiResult
+): result is SearchMultiPersonResult => result.media_type === "person";
