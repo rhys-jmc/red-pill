@@ -15,7 +15,10 @@ export type BottomTabParamList = {
   readonly Blocked: undefined;
 };
 
-export type DiscoverParamList = { readonly DiscoverScreen: undefined };
+export type DiscoverParamList = {
+  readonly DiscoverScreen: undefined;
+  readonly MovieDetailsScreen: { readonly movieId: number };
+};
 
 export type UpNextParamList = {
   readonly UpNextScreen: undefined;

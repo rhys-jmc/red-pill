@@ -36,7 +36,7 @@ export const useSearchMovies = (
         { cancelToken: source.token }
       )
       .then(({ data: { results } }) => {
-        setMovies(results.filter((m) => !isBlocked(m.id)));
+        setMovies(results);
         setIsLoading(false);
         return results;
       })
@@ -45,5 +45,5 @@ export const useSearchMovies = (
     return source.cancel;
   }, [query]);
 
-  return { movies, isLoading };
+  return { movies: movies.filter((m) => !isBlocked(m.id)), isLoading };
 };

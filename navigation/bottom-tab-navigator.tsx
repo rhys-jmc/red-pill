@@ -84,6 +84,10 @@ const DiscoverNavigator = (): JSX.Element => (
       component={DiscoverScreen}
       options={{ headerTitle: "Discover" }}
     />
+    <UpNextStack.Screen
+      name="MovieDetailsScreen"
+      component={MovieDetailsScreen}
+    />
   </DiscoverStack.Navigator>
 );
 

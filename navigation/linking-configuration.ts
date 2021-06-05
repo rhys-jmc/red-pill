@@ -17,6 +17,7 @@ export const LinkingConfiguration: LinkingOptions = {
           Discover: {
             screens: {
               DiscoverScreen: "discover-screen",
+              MovieDetailsScreen: "movie",
             },
           },
           UpNext: {

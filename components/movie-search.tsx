@@ -7,52 +7,49 @@ import {
   StyleSheet,
   ScrollView,
   View,
-  ImageBackground,
   TouchableHighlight,
 } from "react-native";
 
 import { useThemeColor } from "../hooks";
-import { getImageUri, useSearchMovies } from "../services/tmdb";
+import { useSearchMovies } from "../services/tmdb";
 
+import { BlockedButton } from "./blocked-button";
+import { Poster } from "./poster";
 import { ThemedText, ThemedView } from "./themed";
+import { UpNextButton } from "./up-next-button";
+import { WatchedButton } from "./watched-button";
 
 import type { SearchMovieResult } from "../services/tmdb";
-import type { ViewStyle } from "react-native";
 
 export const MovieSearch = ({
-  maxHeight,
-  movie,
   selectMovie,
 }: {
-  readonly maxHeight: NonNullable<ViewStyle["maxHeight"]>;
-  readonly movie: SearchMovieResult | undefined;
   readonly selectMovie: (movie: SearchMovieResult) => void;
 }): JSX.Element => {
   const textInputRef = useRef<TextInput>(null);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [input, setInput] = useState<string>("");
-  const { movies, isLoading } = useSearchMovies(input ?? "");
+  const { movies, isLoading } = useSearchMovies(input);
   const color = useThemeColor({}, "text");
   const focusTextInput = (): void => textInputRef.current?.focus();
-  const shouldShowPlaceholder = !isFocused && !movie?.title;
-  const shouldShowResults = movies.length > 0 && !isLoading;
-  const shouldShowClearIcon =
-    Boolean(isFocused && input) || Boolean(!isFocused && movie?.title);
+  const shouldShowPlaceholder = !isFocused && !input;
+  const shouldShowResults = !isLoading;
+  const shouldShowClearIcon = Boolean(input);
 
   return (
-    <View style={{ backgroundColor: transparentize(0.85, color) }}>
-      <View>
+    <ThemedView>
+      <ThemedView style={{ backgroundColor: transparentize(0.85, color) }}>
         <TextInput
           ref={textInputRef}
           style={[styles.textInput, { color }]}
           onChangeText={setInput}
-          value={isFocused ? input : movie?.title}
+          value={input}
           autoCompleteType="off"
           autoCapitalize="none"
           autoCorrect={false}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          returnKeyType="done"
+          returnKeyType="search"
         />
         <View style={styles.inputIconLeft}>
           <Ionicons color={color} name="search-outline" size={20} />
@@ -79,61 +76,48 @@ export const MovieSearch = ({
             )
           )}
         </View>
-      </View>
-      {isFocused && (
-        <View>
-          {shouldShowResults && (
-            <View
-              style={[
-                styles.resultsContainer,
-                { borderColor: color, maxHeight },
-              ]}
+      </ThemedView>
+      {shouldShowResults && (
+        <ScrollView
+          contentContainerStyle={styles.resultsContent}
+          keyboardShouldPersistTaps="handled"
+          style={styles.results}
+        >
+          {movies.map((movie) => (
+            <TouchableHighlight
+              key={movie.id}
+              onPress={() => selectMovie(movie)}
             >
-              <ScrollView
-                contentContainerStyle={styles.resultsContent}
-                keyboardShouldPersistTaps="handled"
-                style={styles.results}
-              >
-                {movies.map((movie) => (
-                  <TouchableHighlight
-                    key={movie.id}
-                    onPress={() => {
-                      selectMovie(movie);
-                      setInput("");
-                      textInputRef.current?.blur();
-                    }}
-                  >
-                    <ThemedView>
-                      <ImageBackground
-                        source={{
-                          uri: getImageUri(
-                            movie.backdrop_path ?? "",
-                            "backdrop"
-                          ),
-                        }}
-                        resizeMode="cover"
-                        imageStyle={{ opacity: 1 - 0.618 }}
-                        style={styles.result}
-                      >
-                        <ThemedText numberOfLines={1} style={styles.title}>
-                          {movie.title}
-                          {movie.release_date &&
-                            ` (${new Date(movie.release_date).getFullYear()})`}
-                        </ThemedText>
-                      </ImageBackground>
-                    </ThemedView>
-                  </TouchableHighlight>
-                ))}
-              </ScrollView>
-            </View>
-          )}
-        </View>
+              <ThemedView style={styles.result}>
+                <Poster
+                  path={movie.poster_path ?? ""}
+                  height={styles.result.height}
+                />
+                <ThemedView style={styles.resultDetails}>
+                  <ThemedText numberOfLines={1} style={styles.title}>
+                    {movie.title}
+                  </ThemedText>
+                  <ThemedText style={styles.year}>
+                    {movie.release_date &&
+                      new Date(movie.release_date).getFullYear()}
+                  </ThemedText>
+                  <UpNextButton movieId={movie.id} />
+                  <ThemedView style={styles.buttons}>
+                    <WatchedButton movieId={movie.id} />
+                    <BlockedButton movieId={movie.id} />
+                  </ThemedView>
+                </ThemedView>
+              </ThemedView>
+            </TouchableHighlight>
+          ))}
+        </ScrollView>
       )}
-    </View>
+    </ThemedView>
   );
 };
 
 const styles = StyleSheet.create({
+  buttons: { flexDirection: "row" },
   inputIconLeft: {
     bottom: 0,
     justifyContent: "center",
@@ -157,21 +141,19 @@ const styles = StyleSheet.create({
     top: 16,
   },
   result: {
-    alignItems: "center",
     flexDirection: "row",
-    height: 48,
+    height: 140,
+    justifyContent: "space-between",
+    marginTop: 20,
     paddingHorizontal: 20,
   },
-  results: { borderBottomLeftRadius: 8, borderBottomRightRadius: 8 },
-  resultsContainer: {
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
-    borderTopWidth: 0,
-    borderWidth: 1,
-    left: -1,
-    position: "absolute",
-    right: -1,
+  resultDetails: {
+    alignItems: "flex-start",
+    flex: 1,
+    paddingLeft: 10,
+    paddingVertical: 10,
   },
+  results: { borderBottomLeftRadius: 8, borderBottomRightRadius: 8 },
   resultsContent: { alignItems: "stretch" },
   textInput: {
     fontSize: 16,
@@ -179,5 +161,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
   },
-  title: { fontSize: 16 },
+  title: { fontSize: 20, fontWeight: "500" },
+  year: { fontSize: 16 },
 });

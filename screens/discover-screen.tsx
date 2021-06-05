@@ -1,39 +1,22 @@
-import React, { useState } from "react";
-import { ActivityIndicator, ScrollView, StyleSheet } from "react-native";
+import React from "react";
+import { StyleSheet } from "react-native";
 
-import { MovieDetails, MovieSearch, ThemedView } from "../components";
-import { useLayout } from "../hooks";
-import { useMovie } from "../services/tmdb";
+import { MovieSearch, ThemedView } from "../components";
 
-import type { SearchMovieResult } from "../services/tmdb";
+import type { DiscoverParamList } from "../navigation/types";
+import type { StackScreenProps } from "@react-navigation/stack";
 
-export const DiscoverScreen = (): JSX.Element => {
-  const { window } = useLayout();
-  const [height, setHeight] = useState(window.height);
-  const [movieResult, setMovieResult] = useState<SearchMovieResult>();
-  const { movie, isLoading } = useMovie(movieResult?.id);
-
-  return (
-    <ThemedView
-      onLayout={({ nativeEvent: { layout } }) => setHeight(layout.height)}
-      style={styles.container}
-    >
-      <ThemedView style={styles.searchContainer}>
-        <MovieSearch
-          movie={movieResult}
-          maxHeight={height * (1 - 0.618)}
-          selectMovie={setMovieResult}
-        />
-      </ThemedView>
-      {isLoading && <ActivityIndicator size="large" />}
-      {movie && (
-        <ScrollView>
-          <MovieDetails {...{ movie }} />
-        </ScrollView>
-      )}
+export const DiscoverScreen = ({
+  navigation: { navigate },
+}: StackScreenProps<DiscoverParamList, "DiscoverScreen">): JSX.Element => (
+  <ThemedView style={styles.container}>
+    <ThemedView style={styles.searchContainer}>
+      <MovieSearch
+        selectMovie={(m) => navigate("MovieDetailsScreen", { movieId: m.id })}
+      />
     </ThemedView>
-  );
-};
+  </ThemedView>
+);
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
