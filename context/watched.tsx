@@ -17,7 +17,7 @@ type WatchedState = {
   readonly list: readonly number[];
   readonly add: (movieId: number) => void;
   readonly remove: (movieId: number) => void;
-  readonly includes: (movieId: number) => boolean;
+  readonly hasWatched: (movieId: number) => boolean;
   readonly toggle: (movieId: number) => void;
 };
 
@@ -52,19 +52,19 @@ export const WatchedProvider: FC = ({ children }) => {
     []
   );
 
-  const includes = useCallback(
+  const hasWatched = useCallback(
     (movieId: number) => list.includes(movieId),
     [list]
   );
 
   const toggle = useCallback(
-    (movieId: number) => (includes(movieId) ? remove(movieId) : add(movieId)),
-    [add, includes, remove]
+    (movieId: number) => (hasWatched(movieId) ? remove(movieId) : add(movieId)),
+    [add, hasWatched, remove]
   );
 
   const value = useMemo(
-    () => ({ list, add, remove, includes, toggle }),
-    [add, list, remove, includes, toggle]
+    () => ({ list, add, remove, hasWatched, toggle }),
+    [add, list, remove, hasWatched, toggle]
   );
 
   return (

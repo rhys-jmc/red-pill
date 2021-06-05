@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-import { useBlocked } from "../../../context";
+import { useBlocked, useWatched } from "../../../context";
 import { useDebounce } from "../../../hooks";
 import { API_URL, API_KEY_PARAM } from "../constants";
 
@@ -16,6 +16,7 @@ export const useSearchMovies = (
   const [movies, setMovies] = useState<readonly Result[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { isBlocked } = useBlocked();
+  const { hasWatched } = useWatched();
 
   useEffect(() => {
     setMovies([]);
@@ -45,5 +46,8 @@ export const useSearchMovies = (
     return source.cancel;
   }, [query]);
 
-  return { movies: movies.filter((m) => !isBlocked(m.id)), isLoading };
+  return {
+    movies: movies.filter((m) => !isBlocked(m.id) && !hasWatched(m.id)),
+    isLoading,
+  };
 };

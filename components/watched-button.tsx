@@ -9,12 +9,12 @@ export const WatchedButton = ({
   readonly movieId: number;
 }): JSX.Element | null => {
   const { isBlocked } = useBlocked();
-  const { includes, toggle } = useWatched();
-  const title = useMemo(
-    () => (includes(movieId) ? "Unwatch" : "Watched"),
-    [includes, movieId]
-  );
+  const { hasWatched, toggle } = useWatched();
   const handlePress = useCallback(() => toggle(movieId), [movieId, toggle]);
+  const title = useMemo(
+    () => (hasWatched(movieId) ? "Unwatch" : "Watched"),
+    [hasWatched, movieId]
+  );
 
   return isBlocked(movieId) ? null : (
     <Button title={title} onPress={handlePress} />
