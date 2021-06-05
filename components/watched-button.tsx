@@ -11,7 +11,7 @@ export const WatchedButton = ({
   const { isBlocked } = useBlocked();
   const { includes, toggle } = useWatched();
   const title = useMemo(
-    () => (includes(movieId) ? "Unwatch" : "Watch"),
+    () => (includes(movieId) ? "Unwatch" : "Watched"),
     [includes, movieId]
   );
   const handlePress = useCallback(() => toggle(movieId), [movieId, toggle]);
