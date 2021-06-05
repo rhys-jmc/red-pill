@@ -10,12 +10,18 @@ import React from "react";
 
 import { theme } from "../constants";
 import { useColorScheme } from "../hooks";
-import { DiscoverScreen, MovieDetailsScreen, UpNextScreen } from "../screens";
+import {
+  DiscoverScreen,
+  MovieDetailsScreen,
+  UpNextScreen,
+  WatchedScreen,
+} from "../screens";
 
 import type {
   BottomTabParamList,
   DiscoverParamList,
   UpNextParamList,
+  WatchedParamList,
 } from "./types";
 import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 
@@ -43,6 +49,11 @@ export const BottomTabNavigator = (): JSX.Element => (
       name="UpNext"
       component={UpNextNavigator}
       options={{ tabBarIcon: listTabBarIcon, tabBarLabel: "Up Next" }}
+    />
+    <BottomTab.Screen
+      name="Watched"
+      component={WatchedNavigator}
+      options={{ tabBarIcon: listTabBarIcon, tabBarLabel: "Watched" }}
     />
   </BottomTab.Navigator>
 );
@@ -75,4 +86,20 @@ const UpNextNavigator = (): JSX.Element => (
       component={MovieDetailsScreen}
     />
   </UpNextStack.Navigator>
+);
+
+const WatchedStack = createStackNavigator<WatchedParamList>();
+
+const WatchedNavigator = (): JSX.Element => (
+  <WatchedStack.Navigator>
+    <WatchedStack.Screen
+      name="WatchedScreen"
+      component={WatchedScreen}
+      options={{ headerTitle: "Watched" }}
+    />
+    <WatchedStack.Screen
+      name="MovieDetailsScreen"
+      component={MovieDetailsScreen}
+    />
+  </WatchedStack.Navigator>
 );

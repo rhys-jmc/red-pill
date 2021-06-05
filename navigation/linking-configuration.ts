@@ -25,6 +25,12 @@ export const LinkingConfiguration: LinkingOptions = {
               MovieDetailsScreen: "movie",
             },
           },
+          Watched: {
+            screens: {
+              WatchedScreen: "watched",
+              MovieDetailsScreen: "movie",
+            },
+          },
         },
       },
       NotFound: "*",

@@ -7,6 +7,7 @@ import { getTmdbImageUri } from "../services/tmdb";
 import { Poster } from "./poster";
 import { ThemedText, ThemedView } from "./themed";
 import { UpNextButton } from "./up-next-button";
+import { WatchedButton } from "./watched-button";
 
 import type { Movie } from "../services/tmdb";
 
@@ -59,6 +60,7 @@ export const MovieDetails = ({
           {movie.genres.map((g) => g.name).join(", ")}
         </ThemedText>
         {movie.id && <UpNextButton movieId={movie.id} />}
+        {movie.id && <WatchedButton movieId={movie.id} />}
       </ThemedView>
     </ThemedView>
     <ThemedView style={styles.info}>

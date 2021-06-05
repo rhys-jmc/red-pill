@@ -1,22 +1,43 @@
 import "react-native-gesture-handler";
+import { Ionicons } from "@expo/vector-icons";
+import AppLoading from "expo-app-loading";
+import { loadAsync } from "expo-font";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { useCachedResources, useColorScheme } from "./hooks";
+import { ContextProvier } from "./context";
+import { useColorScheme } from "./hooks";
 import { Navigation } from "./navigation";
 
 const App = (): JSX.Element | null => {
-  const isLoadingComplete = useCachedResources();
+  const [isLoading, setIsLoading] = useState(true);
   const colorScheme = useColorScheme();
 
-  return !isLoadingComplete ? null : (
+  useEffect(() => {
+    loadResourcesAndDataAsync()
+      .then(() => setIsLoading(false))
+      .catch(console.error);
+  }, []);
+
+  return isLoading ? (
+    <AppLoading />
+  ) : (
     <SafeAreaProvider>
-      <Navigation colorScheme={colorScheme} />
-      <StatusBar />
+      <ContextProvier>
+        <Navigation colorScheme={colorScheme} />
+        <StatusBar />
+      </ContextProvier>
     </SafeAreaProvider>
   );
 };
 
 // eslint-disable-next-line import/no-default-export
 export default App;
+
+const loadResourcesAndDataAsync = (): Promise<void> =>
+  loadAsync({
+    ...Ionicons.font,
+    // eslint-disable-next-line unicorn/prefer-module
+    "space-mono": require("./assets/fonts/SpaceMono-Regular.ttf"),
+  });

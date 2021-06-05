@@ -11,11 +11,17 @@ export type RootStackParamList = {
 export type BottomTabParamList = {
   readonly Discover: undefined;
   readonly UpNext: undefined;
+  readonly Watched: undefined;
 };
 
 export type DiscoverParamList = { readonly DiscoverScreen: undefined };
 
 export type UpNextParamList = {
   readonly UpNextScreen: undefined;
+  readonly MovieDetailsScreen: { readonly movieId: number };
+};
+
+export type WatchedParamList = {
+  readonly WatchedScreen: undefined;
   readonly MovieDetailsScreen: { readonly movieId: number };
 };
