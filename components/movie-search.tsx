@@ -37,7 +37,7 @@ export const MovieSearch = ({
   const shouldShowClearIcon = Boolean(input);
 
   return (
-    <ThemedView>
+    <ThemedView style={styles.fill}>
       <ThemedView style={{ backgroundColor: transparentize(0.85, color) }}>
         <TextInput
           ref={textInputRef}
@@ -78,39 +78,41 @@ export const MovieSearch = ({
         </View>
       </ThemedView>
       {shouldShowResults && (
-        <ScrollView
-          contentContainerStyle={styles.resultsContent}
-          keyboardShouldPersistTaps="handled"
-          style={styles.results}
-        >
-          {movies.map((movie) => (
-            <TouchableHighlight
-              key={movie.id}
-              onPress={() => selectMovie(movie)}
-            >
-              <ThemedView style={styles.result}>
-                <Poster
-                  path={movie.poster_path ?? ""}
-                  height={styles.result.height}
-                />
-                <ThemedView style={styles.resultDetails}>
-                  <ThemedText numberOfLines={1} style={styles.title}>
-                    {movie.title}
-                  </ThemedText>
-                  <ThemedText style={styles.year}>
-                    {movie.release_date &&
-                      new Date(movie.release_date).getFullYear()}
-                  </ThemedText>
-                  <UpNextButton movieId={movie.id} />
-                  <ThemedView style={styles.buttons}>
-                    <WatchedButton movieId={movie.id} />
-                    <BlockedButton movieId={movie.id} />
+        <ThemedView style={styles.fill}>
+          <ScrollView
+            contentContainerStyle={styles.resultsContent}
+            keyboardShouldPersistTaps="handled"
+            style={styles.results}
+          >
+            {movies.map((movie) => (
+              <TouchableHighlight
+                key={movie.id}
+                onPress={() => selectMovie(movie)}
+              >
+                <ThemedView style={styles.result}>
+                  <Poster
+                    path={movie.poster_path ?? ""}
+                    height={styles.result.height}
+                  />
+                  <ThemedView style={styles.resultDetails}>
+                    <ThemedText numberOfLines={1} style={styles.title}>
+                      {movie.title}
+                    </ThemedText>
+                    <ThemedText style={styles.year}>
+                      {movie.release_date &&
+                        new Date(movie.release_date).getFullYear()}
+                    </ThemedText>
+                    <UpNextButton movieId={movie.id} />
+                    <ThemedView style={styles.buttons}>
+                      <WatchedButton movieId={movie.id} />
+                      <BlockedButton movieId={movie.id} />
+                    </ThemedView>
                   </ThemedView>
                 </ThemedView>
-              </ThemedView>
-            </TouchableHighlight>
-          ))}
-        </ScrollView>
+              </TouchableHighlight>
+            ))}
+          </ScrollView>
+        </ThemedView>
       )}
     </ThemedView>
   );
@@ -118,6 +120,7 @@ export const MovieSearch = ({
 
 const styles = StyleSheet.create({
   buttons: { flexDirection: "row" },
+  fill: { flex: 1 },
   inputIconLeft: {
     bottom: 0,
     justifyContent: "center",
@@ -154,7 +157,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   results: { borderBottomLeftRadius: 8, borderBottomRightRadius: 8 },
-  resultsContent: { alignItems: "stretch" },
+  resultsContent: { alignItems: "stretch", paddingBottom: 20 },
   textInput: {
     fontSize: 16,
     marginLeft: 30,

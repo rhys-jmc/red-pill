@@ -10,15 +10,12 @@ export const DiscoverScreen = ({
   navigation: { navigate },
 }: StackScreenProps<DiscoverParamList, "DiscoverScreen">): JSX.Element => (
   <ThemedView style={styles.container}>
-    <ThemedView style={styles.searchContainer}>
-      <MovieSearch
-        selectMovie={(m) => navigate("MovieDetailsScreen", { movieId: m.id })}
-      />
-    </ThemedView>
+    <MovieSearch
+      selectMovie={(m) => navigate("MovieDetailsScreen", { movieId: m.id })}
+    />
   </ThemedView>
 );
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  searchContainer: { zIndex: 1 },
 });
