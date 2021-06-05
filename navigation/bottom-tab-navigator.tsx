@@ -33,8 +33,16 @@ const discoverTabBarIcon: BottomTabNavigationOptions["tabBarIcon"] = (
   props
 ) => <Ionicons name="search-outline" {...props} />;
 
-const listTabBarIcon: BottomTabNavigationOptions["tabBarIcon"] = (props) => (
+const upNextTabBarIcon: BottomTabNavigationOptions["tabBarIcon"] = (props) => (
   <Ionicons name="list-outline" {...props} />
+);
+
+const watchedTabBarIcon: BottomTabNavigationOptions["tabBarIcon"] = (props) => (
+  <Ionicons name="checkmark-done-outline" {...props} />
+);
+
+const blockedTabBarIcon: BottomTabNavigationOptions["tabBarIcon"] = (props) => (
+  <Ionicons name="close-outline" {...props} />
 );
 
 export const BottomTabNavigator = (): JSX.Element => (
@@ -50,17 +58,17 @@ export const BottomTabNavigator = (): JSX.Element => (
     <BottomTab.Screen
       name="UpNext"
       component={UpNextNavigator}
-      options={{ tabBarIcon: listTabBarIcon, tabBarLabel: "Up Next" }}
+      options={{ tabBarIcon: upNextTabBarIcon, tabBarLabel: "Up Next" }}
     />
     <BottomTab.Screen
       name="Watched"
       component={WatchedNavigator}
-      options={{ tabBarIcon: listTabBarIcon, tabBarLabel: "Watched" }}
+      options={{ tabBarIcon: watchedTabBarIcon, tabBarLabel: "Watched" }}
     />
     <BottomTab.Screen
       name="Blocked"
       component={BlockedNavigator}
-      options={{ tabBarIcon: listTabBarIcon, tabBarLabel: "Blocked" }}
+      options={{ tabBarIcon: blockedTabBarIcon, tabBarLabel: "Blocked" }}
     />
   </BottomTab.Navigator>
 );
