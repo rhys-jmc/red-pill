@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 
-import { MovieSearch, ThemedView } from "../components";
+import { Search, ThemedView } from "../components";
 
 import type { DiscoverParamList } from "../navigation/types";
 import type { StackScreenProps } from "@react-navigation/stack";
@@ -10,8 +10,12 @@ export const DiscoverScreen = ({
   navigation: { navigate },
 }: StackScreenProps<DiscoverParamList, "DiscoverScreen">): JSX.Element => (
   <ThemedView style={styles.container}>
-    <MovieSearch
-      selectMovie={(m) => navigate("MovieDetailsScreen", { movieId: m.id })}
+    <Search
+      selectItem={(item) =>
+        item.media_type === "movie"
+          ? navigate("MovieDetailsScreen", { movieId: item.id })
+          : navigate("PersonMoviesScreen", { personId: item.id })
+      }
     />
   </ThemedView>
 );

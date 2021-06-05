@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 import { useBlocked } from "../../../context";
 import { getMovie } from "../helpers";
@@ -13,22 +13,9 @@ export const useMovies = ({
   readonly movieIds: readonly number[];
   readonly showBlocked?: boolean;
 }): { readonly movies: readonly Movie[]; readonly isLoading: boolean } => {
-  const [movies, setMovies] = useState<readonly Movie[]>([]);
+  const [_movies, setMovies] = useState<readonly Movie[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { isBlocked } = useBlocked();
-
-  const loadMovies = useCallback(
-    (movies: readonly Movie[]) => {
-      setMovies(
-        movies
-          .filter((m) => showBlocked || !isBlocked(m.id))
-          .sort((a, b) => a.title.localeCompare(b.title))
-      );
-
-      setIsLoading(false);
-    },
-    [isBlocked]
-  );
 
   useEffect(() => {
     setMovies([]);
@@ -40,12 +27,26 @@ export const useMovies = ({
       source: axios.CancelToken.source(),
     }));
 
-    Promise.all(items.map(getMovie)).then(loadMovies).catch(console.error);
+    Promise.all(items.map(getMovie))
+      .then((movies) => {
+        setMovies(movies);
+        setIsLoading(false);
+        return movies;
+      })
+      .catch(console.error);
 
     return () => {
       items.map(({ source }) => source.cancel());
     };
   }, [movieIds]);
 
-  return { movies, isLoading };
+  const movies = useMemo(
+    () =>
+      _movies
+        .filter((m) => showBlocked || !isBlocked(m.id))
+        .sort((a, b) => a.title.localeCompare(b.title)),
+    [_movies, isBlocked]
+  );
+
+  return useMemo(() => ({ movies, isLoading }), [movies, isLoading]);
 };

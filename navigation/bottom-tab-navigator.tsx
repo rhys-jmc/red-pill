@@ -11,12 +11,13 @@ import React from "react";
 import { theme } from "../constants";
 import { useColorScheme } from "../hooks";
 import {
+  BlockedScreen,
   DiscoverScreen,
   MovieDetailsScreen,
+  PersonMoviesScreen,
   UpNextScreen,
   WatchedScreen,
 } from "../screens";
-import { BlockedScreen } from "../screens/blocked-screen";
 
 import type {
   BlockedParamList,
@@ -84,9 +85,13 @@ const DiscoverNavigator = (): JSX.Element => (
       component={DiscoverScreen}
       options={{ headerTitle: "Discover" }}
     />
-    <UpNextStack.Screen
+    <DiscoverStack.Screen
       name="MovieDetailsScreen"
       component={MovieDetailsScreen}
+    />
+    <DiscoverStack.Screen
+      name="PersonMoviesScreen"
+      component={PersonMoviesScreen}
     />
   </DiscoverStack.Navigator>
 );

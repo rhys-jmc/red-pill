@@ -94,3 +94,37 @@ export type SearchMultiResult =
 
 export type SearchMovieData = ResultsData<SearchMovieResult>;
 export type SearchMultiData = ResultsData<SearchMultiResult>;
+
+type Cast = SearchMovieResult & {
+  readonly character: string;
+  readonly credit_id: string;
+};
+
+type Crew = SearchMovieResult & {
+  readonly department: string;
+  readonly job: string;
+  readonly credit_id: string;
+};
+
+export type MovieCredits = {
+  readonly id: number;
+  readonly cast: readonly Cast[];
+  readonly crew: readonly Crew[];
+};
+
+export type Person = {
+  readonly birthday: string | null;
+  readonly known_for_department: string;
+  readonly deathday: string | null;
+  readonly id: number;
+  readonly name: string;
+  readonly also_known_as: readonly string[];
+  readonly gender: 0 | 1 | 2 | 3;
+  readonly biography: string;
+  readonly popularity: number;
+  readonly place_of_birth: string | null;
+  readonly profile_path: string;
+  readonly adult: boolean;
+  readonly imdb_id: string;
+  readonly homepage: string | null;
+};

@@ -33,8 +33,9 @@ export const WatchedScreen = ({
               onPress={() => navigate("MovieDetailsScreen", { movieId: m.id })}
             >
               <Poster
-                path={m.poster_path ?? ""}
+                path={m.poster_path}
                 width={posterWidth}
+                variant="poster"
                 style={styles.poster}
               />
             </TouchableOpacity>

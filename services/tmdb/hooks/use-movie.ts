@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 import { getMovie } from "../helpers";
 
@@ -29,5 +29,5 @@ export const useMovie = (
     return source.cancel;
   }, [movieId]);
 
-  return { movie, isLoading };
+  return useMemo(() => ({ movie, isLoading }), [movie, isLoading]);
 };

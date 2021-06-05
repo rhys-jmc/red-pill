@@ -1,7 +1,9 @@
 export const getImageUri = (
   path: string,
-  variant: "poster" | "backdrop"
+  variant: "poster" | "profile" | "backdrop"
 ): string =>
   `https://themoviedb.org/t/p/${
-    variant === "poster" ? "w600_and_h900_bestv2" : "w1000_and_h450_multi_faces"
+    variant === "backdrop"
+      ? "w1000_and_h450_multi_faces"
+      : "w600_and_h900_bestv2"
   }${path}`;

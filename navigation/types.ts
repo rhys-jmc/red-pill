@@ -18,6 +18,7 @@ export type BottomTabParamList = {
 export type DiscoverParamList = {
   readonly DiscoverScreen: undefined;
   readonly MovieDetailsScreen: { readonly movieId: number };
+  readonly PersonMoviesScreen: { readonly personId: number };
 };
 
 export type UpNextParamList = {

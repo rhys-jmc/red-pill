@@ -1,9 +1,10 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 import { useBlocked, useWatched } from "../../../context";
 import { useDebounce } from "../../../hooks";
 import { API_URL, API_KEY_PARAM } from "../constants";
+import { isMovie } from "../helpers";
 
 import type {
   SearchMultiData,
@@ -15,17 +16,19 @@ import type {
 export const useSearchMulti = (
   input: string
 ): {
-  readonly movies: readonly SearchMultiMovieResult[];
+  readonly items: readonly (SearchMultiMovieResult | SearchMultiPersonResult)[];
   readonly isLoading: boolean;
 } => {
   const query = useDebounce(input);
-  const [movies, setMovies] = useState<readonly SearchMultiMovieResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { isBlocked } = useBlocked();
   const { hasWatched } = useWatched();
+  const [_items, setItems] = useState<
+    readonly (SearchMultiMovieResult | SearchMultiPersonResult)[]
+  >([]);
 
   useEffect(() => {
-    setMovies([]);
+    setItems([]);
     if (input) setIsLoading(true);
     else setIsLoading(false);
   }, [input]);
@@ -43,10 +46,7 @@ export const useSearchMulti = (
         { cancelToken: source.token }
       )
       .then(({ data: { results } }) => {
-        const movies = results
-          .filter(isMovieOrPerson)
-          .flatMap((r) => (isMovie(r) ? r : r.known_for.filter(isMovie)));
-        setMovies(movies);
+        setItems(results.filter(isMovieOrPerson));
         setIsLoading(false);
         return results;
       })
@@ -55,19 +55,18 @@ export const useSearchMulti = (
     return source.cancel;
   }, [query]);
 
-  return {
-    movies: movies.filter((m) => !isBlocked(m.id) && !hasWatched(m.id)),
-    isLoading,
-  };
+  const items = useMemo(
+    () => _items.filter((m) => !isBlocked(m.id) && !hasWatched(m.id)),
+    [_items, isBlocked, hasWatched]
+  );
+
+  return useMemo(() => ({ items, isLoading }), [items, isLoading]);
 };
 
 const isMovieOrPerson = (
   result: SearchMultiResult
 ): result is SearchMultiMovieResult | SearchMultiPersonResult =>
   isMovie(result) || isPerson(result);
-
-const isMovie = (result: SearchMultiResult): result is SearchMultiMovieResult =>
-  result.media_type === "movie";
 
 const isPerson = (
   result: SearchMultiResult

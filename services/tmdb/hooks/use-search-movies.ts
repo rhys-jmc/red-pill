@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 import { useBlocked, useWatched } from "../../../context";
 import { useDebounce } from "../../../hooks";
@@ -14,7 +14,7 @@ export const useSearchMovies = (
   readonly isLoading: boolean;
 } => {
   const query = useDebounce(input);
-  const [movies, setMovies] = useState<readonly SearchMovieResult[]>([]);
+  const [_movies, setMovies] = useState<readonly SearchMovieResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { isBlocked } = useBlocked();
   const { hasWatched } = useWatched();
@@ -47,8 +47,10 @@ export const useSearchMovies = (
     return source.cancel;
   }, [query]);
 
-  return {
-    movies: movies.filter((m) => !isBlocked(m.id) && !hasWatched(m.id)),
-    isLoading,
-  };
+  const movies = useMemo(
+    () => _movies.filter((m) => !isBlocked(m.id) && !hasWatched(m.id)),
+    [_movies, isBlocked, hasWatched]
+  );
+
+  return useMemo(() => ({ movies, isLoading }), [movies, isLoading]);
 };
