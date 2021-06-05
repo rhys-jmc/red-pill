@@ -1,13 +1,14 @@
 import React, { useCallback, useMemo } from "react";
 import { Button } from "react-native";
 
-import { useUpNext } from "../context/up-next";
+import { useBlocked, useUpNext } from "../context";
 
 export const UpNextButton = ({
   movieId,
 }: {
   readonly movieId: number;
-}): JSX.Element => {
+}): JSX.Element | null => {
+  const { isBlocked } = useBlocked();
   const { includes, toggle } = useUpNext();
   const title = useMemo(
     () => `${includes(movieId) ? "Remove from" : "Add to"} Up Next`,
@@ -15,5 +16,7 @@ export const UpNextButton = ({
   );
   const handlePress = useCallback(() => toggle(movieId), [movieId, toggle]);
 
-  return <Button title={title} onPress={handlePress} />;
+  return isBlocked(movieId) ? null : (
+    <Button title={title} onPress={handlePress} />
+  );
 };

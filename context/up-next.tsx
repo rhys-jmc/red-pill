@@ -9,6 +9,8 @@ import React, {
 
 import { makeStorage } from "../services/storage";
 
+import { useBlocked } from "./blocked";
+
 import type { FC } from "react";
 
 type UpNextState = {
@@ -25,7 +27,9 @@ const initial: readonly number[] = [];
 const storage = makeStorage("up-next", { list: initial });
 
 export const UpNextProvider: FC = ({ children }) => {
-  const [list, setList] = useState<readonly number[]>([]);
+  const [_list, setList] = useState<readonly number[]>([]);
+  const { isBlocked } = useBlocked();
+  const list = _list.filter((id) => !isBlocked(id));
 
   useEffect(() => {
     storage
@@ -35,8 +39,8 @@ export const UpNextProvider: FC = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    storage.set({ list }).catch(console.error);
-  }, [list]);
+    storage.set({ list: _list }).catch(console.error);
+  }, [_list]);
 
   const add = useCallback(
     (movieId: number) => setList((prev) => [...prev, movieId]),
@@ -71,8 +75,7 @@ export const UpNextProvider: FC = ({ children }) => {
 export const useUpNext = (): UpNextState => {
   const context = useContext(UpNextContext);
 
-  if (!context)
-    throw new Error("useUpNextList must be used within UpNextProvider");
+  if (!context) throw new Error("useUpNext must be used within UpNextProvider");
 
   return context;
 };

@@ -9,6 +9,8 @@ import React, {
 
 import { makeStorage } from "../services/storage";
 
+import { useBlocked } from "./blocked";
+
 import type { FC } from "react";
 
 type WatchedState = {
@@ -25,7 +27,9 @@ const initial: readonly number[] = [];
 const storage = makeStorage("watched", { list: initial });
 
 export const WatchedProvider: FC = ({ children }) => {
-  const [list, setList] = useState<readonly number[]>([]);
+  const [_list, setList] = useState<readonly number[]>([]);
+  const { isBlocked } = useBlocked();
+  const list = _list.filter((id) => !isBlocked(id));
 
   useEffect(() => {
     storage
@@ -35,8 +39,8 @@ export const WatchedProvider: FC = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    storage.set({ list }).catch(console.error);
-  }, [list]);
+    storage.set({ list: _list }).catch(console.error);
+  }, [_list]);
 
   const add = useCallback(
     (movieId: number) => setList((prev) => [...prev, movieId]),
@@ -72,7 +76,7 @@ export const useWatched = (): WatchedState => {
   const context = useContext(WatchedContext);
 
   if (!context)
-    throw new Error("useWatchedList must be used within WatchedProvider");
+    throw new Error("useWatched must be used within WatchedProvider");
 
   return context;
 };

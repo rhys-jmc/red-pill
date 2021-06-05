@@ -16,8 +16,10 @@ import {
   UpNextScreen,
   WatchedScreen,
 } from "../screens";
+import { BlockedScreen } from "../screens/blocked-screen";
 
 import type {
+  BlockedParamList,
   BottomTabParamList,
   DiscoverParamList,
   UpNextParamList,
@@ -54,6 +56,11 @@ export const BottomTabNavigator = (): JSX.Element => (
       name="Watched"
       component={WatchedNavigator}
       options={{ tabBarIcon: listTabBarIcon, tabBarLabel: "Watched" }}
+    />
+    <BottomTab.Screen
+      name="Blocked"
+      component={BlockedNavigator}
+      options={{ tabBarIcon: listTabBarIcon, tabBarLabel: "Blocked" }}
     />
   </BottomTab.Navigator>
 );
@@ -102,4 +109,20 @@ const WatchedNavigator = (): JSX.Element => (
       component={MovieDetailsScreen}
     />
   </WatchedStack.Navigator>
+);
+
+const BlockedStack = createStackNavigator<BlockedParamList>();
+
+const BlockedNavigator = (): JSX.Element => (
+  <BlockedStack.Navigator>
+    <BlockedStack.Screen
+      name="BlockedScreen"
+      component={BlockedScreen}
+      options={{ headerTitle: "Blocked" }}
+    />
+    <BlockedStack.Screen
+      name="MovieDetailsScreen"
+      component={MovieDetailsScreen}
+    />
+  </BlockedStack.Navigator>
 );

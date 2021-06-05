@@ -31,6 +31,12 @@ export const LinkingConfiguration: LinkingOptions = {
               MovieDetailsScreen: "movie",
             },
           },
+          Blocked: {
+            screens: {
+              BlockedScreen: "blocked",
+              MovieDetailsScreen: "movie",
+            },
+          },
         },
       },
       NotFound: "*",

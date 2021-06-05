@@ -4,6 +4,7 @@ import { ImageBackground, StyleSheet } from "react-native";
 
 import { getTmdbImageUri } from "../services/tmdb";
 
+import { BlockedButton } from "./blocked-button";
 import { Poster } from "./poster";
 import { ThemedText, ThemedView } from "./themed";
 import { UpNextButton } from "./up-next-button";
@@ -61,6 +62,7 @@ export const MovieDetails = ({
         </ThemedText>
         {movie.id && <UpNextButton movieId={movie.id} />}
         {movie.id && <WatchedButton movieId={movie.id} />}
+        {movie.id && <BlockedButton movieId={movie.id} />}
       </ThemedView>
     </ThemedView>
     <ThemedView style={styles.info}>

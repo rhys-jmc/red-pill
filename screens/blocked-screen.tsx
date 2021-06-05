@@ -7,20 +7,23 @@ import {
 } from "react-native";
 
 import { Poster, ThemedView } from "../components";
-import { useWatched } from "../context";
+import { useBlocked } from "../context";
 import { useLayout } from "../hooks";
 import { useMovies } from "../services/tmdb";
 
-import type { WatchedParamList } from "../navigation/types";
+import type { BlockedParamList } from "../navigation/types";
 import type { StackScreenProps } from "@react-navigation/stack";
 
-export const WatchedScreen = ({
+export const BlockedScreen = ({
   navigation: { navigate },
-}: StackScreenProps<WatchedParamList, "WatchedScreen">): JSX.Element => {
-  const watched = useWatched();
-  const { movies, isLoading } = useMovies({ movieIds: watched.list });
+}: StackScreenProps<BlockedParamList, "BlockedScreen">): JSX.Element => {
+  const blocked = useBlocked();
   const { window } = useLayout();
   const posterWidth = (window.width - 20) / 3 - 20;
+  const { movies, isLoading } = useMovies({
+    movieIds: blocked.list,
+    showBlocked: true,
+  });
 
   return (
     <ThemedView style={styles.container}>

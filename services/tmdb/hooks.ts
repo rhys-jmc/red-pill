@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 
+import { useBlocked } from "../../context";
 import { useDebounce } from "../../hooks";
 
 import { API_KEY_PARAM, API_URL } from "./constants";
@@ -28,7 +29,10 @@ export const useMovie = (
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (movieId !== undefined) setIsLoading(true);
+    if (movieId !== undefined) {
+      setMovie(undefined);
+      setIsLoading(true);
+    }
   }, [movieId]);
 
   useEffect(() => {
@@ -36,14 +40,11 @@ export const useMovie = (
 
     const source = axios.CancelToken.source();
 
-    axios
-      .get<Movie>(`${API_URL}/movie/${movieId}?${API_KEY_PARAM}`, {
-        cancelToken: source.token,
-      })
-      .then(({ data }) => {
-        setMovie(data);
+    getMovie({ movieId, source })
+      .then((movie) => {
+        setMovie(movie);
         setIsLoading(false);
-        return data;
+        return movie;
       })
       .catch(console.error);
 
@@ -53,11 +54,16 @@ export const useMovie = (
   return { movie, isLoading };
 };
 
-export const useMovies = (
-  movieIds: readonly number[]
-): { readonly movies: readonly Movie[]; readonly isLoading: boolean } => {
+export const useMovies = ({
+  movieIds,
+  showBlocked = false,
+}: {
+  readonly movieIds: readonly number[];
+  readonly showBlocked?: boolean;
+}): { readonly movies: readonly Movie[]; readonly isLoading: boolean } => {
   const [movies, setMovies] = useState<readonly Movie[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { isBlocked } = useBlocked();
 
   useEffect(() => {
     setMovies([]);
@@ -65,10 +71,18 @@ export const useMovies = (
     else setIsLoading(false);
   }, [movieIds]);
 
-  const loadMovies = useCallback((movies: readonly Movie[]) => {
-    setMovies([...movies].sort((a, b) => a.title.localeCompare(b.title)));
-    setIsLoading(false);
-  }, []);
+  const loadMovies = useCallback(
+    (movies: readonly Movie[]) => {
+      setMovies(
+        movies
+          .filter((m) => showBlocked || !isBlocked(m.id))
+          .sort((a, b) => a.title.localeCompare(b.title))
+      );
+
+      setIsLoading(false);
+    },
+    [isBlocked]
+  );
 
   useEffect(() => {
     const items = movieIds.map((movieId) => ({
@@ -94,6 +108,7 @@ export const useSearchMovies = (
   const query = useDebounce(input);
   const [movies, setMovies] = useState<readonly Result[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { isBlocked } = useBlocked();
 
   useEffect(() => {
     setMovies([]);
@@ -114,7 +129,7 @@ export const useSearchMovies = (
         { cancelToken: source.token }
       )
       .then(({ data: { results } }) => {
-        setMovies(results);
+        setMovies(results.filter((m) => !isBlocked(m.id)));
         setIsLoading(false);
         return results;
       })

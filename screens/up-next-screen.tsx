@@ -7,7 +7,7 @@ import {
 } from "react-native";
 
 import { Poster, ThemedView } from "../components";
-import { useUpNext } from "../context/up-next";
+import { useUpNext } from "../context";
 import { useLayout } from "../hooks";
 import { useMovies } from "../services/tmdb";
 
@@ -18,7 +18,7 @@ export const UpNextScreen = ({
   navigation: { navigate },
 }: StackScreenProps<UpNextParamList, "UpNextScreen">): JSX.Element => {
   const upNext = useUpNext();
-  const { movies, isLoading } = useMovies(upNext.list);
+  const { movies, isLoading } = useMovies({ movieIds: upNext.list });
   const { window } = useLayout();
   const posterWidth = (window.width - 20) / 3 - 20;
 

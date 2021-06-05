@@ -1,13 +1,14 @@
 import React, { useCallback, useMemo } from "react";
 import { Button } from "react-native";
 
-import { useWatched } from "../context/watched";
+import { useBlocked, useWatched } from "../context";
 
 export const WatchedButton = ({
   movieId,
 }: {
   readonly movieId: number;
-}): JSX.Element => {
+}): JSX.Element | null => {
+  const { isBlocked } = useBlocked();
   const { includes, toggle } = useWatched();
   const title = useMemo(
     () => (includes(movieId) ? "Unwatch" : "Watch"),
@@ -15,5 +16,7 @@ export const WatchedButton = ({
   );
   const handlePress = useCallback(() => toggle(movieId), [movieId, toggle]);
 
-  return <Button title={title} onPress={handlePress} />;
+  return isBlocked(movieId) ? null : (
+    <Button title={title} onPress={handlePress} />
+  );
 };
