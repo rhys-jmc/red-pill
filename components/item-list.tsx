@@ -14,9 +14,7 @@ import type {
   SearchMultiMovieResult,
   SearchMultiPersonResult,
 } from "../services/tmdb";
-import type { VFC } from "react";
 
-// eslint-disable-next-line functional/no-mixed-type
 type ItemProps = {
   readonly items: readonly (SearchMultiMovieResult | SearchMultiPersonResult)[];
   readonly selectItem: (item: {
@@ -32,59 +30,60 @@ type Datum = {
   readonly variant: "poster" | "profile";
   readonly title: string;
   readonly subtitle: string | undefined;
+  readonly onPress: () => void;
 };
 
-const toDatum = (item: ItemProps["items"][number]): Datum => ({
-  id: item.id,
-  media_type: item.media_type,
-  path: item.media_type === "movie" ? item.poster_path : item.profile_path,
-  variant: item.media_type === "movie" ? "poster" : "profile",
-  title: item.media_type === "movie" ? item.title : item.name,
-  subtitle:
-    item.media_type === "movie"
-      ? item.release_date && new Date(item.release_date).getFullYear().toFixed()
-      : item.known_for
-          .filter(isMovie)
-          .map((m) => m.title)
-          .join(", "),
-});
+const toDatum =
+  (selectItem: ItemProps["selectItem"]) =>
+  (item: ItemProps["items"][number]): Datum => ({
+    id: item.id,
+    media_type: item.media_type,
+    onPress: () => selectItem(item),
+    path: item.media_type === "movie" ? item.poster_path : item.profile_path,
+    variant: item.media_type === "movie" ? "poster" : "profile",
+    title: item.media_type === "movie" ? item.title : item.name,
+    subtitle:
+      item.media_type === "movie"
+        ? item.release_date &&
+          new Date(item.release_date).getFullYear().toFixed()
+        : item.known_for
+            .filter(isMovie)
+            .map((m) => m.title)
+            .join(", "),
+  });
 
-const getRenderItem =
-  (selectItem: ItemProps["selectItem"]): VFC<{ readonly item: Datum }> =>
-  // eslint-disable-next-line react/display-name
-  ({ item }) =>
-    (
-      <TouchableHighlight
-        key={`${item.media_type}-${item.id}`}
-        onPress={() => selectItem(item)}
-        style={styles.resultContainer}
-      >
-        <ThemedView style={styles.result}>
-          <Poster
-            path={item.path}
-            height={styles.result.height}
-            variant={item.media_type === "movie" ? "poster" : "profile"}
-          />
-          <ThemedView style={styles.resultDetails}>
-            <ThemedText numberOfLines={1} style={styles.title}>
-              {item.title}
-            </ThemedText>
-            <ThemedText numberOfLines={1} style={styles.year}>
-              {item.subtitle}
-            </ThemedText>
-            {item.media_type === "movie" && (
-              <>
-                <UpNextButton movieId={item.id} />
-                <ThemedView style={styles.buttons}>
-                  <WatchedButton movieId={item.id} />
-                  <BlockedButton movieId={item.id} />
-                </ThemedView>
-              </>
-            )}
-          </ThemedView>
-        </ThemedView>
-      </TouchableHighlight>
-    );
+const renderItem = ({ item }: { readonly item: Datum }): JSX.Element => (
+  <TouchableHighlight
+    key={`${item.media_type}-${item.id}`}
+    onPress={item.onPress}
+    style={styles.resultContainer}
+  >
+    <ThemedView style={styles.result}>
+      <Poster
+        path={item.path}
+        height={styles.result.height}
+        variant={item.media_type === "movie" ? "poster" : "profile"}
+      />
+      <ThemedView style={styles.resultDetails}>
+        <ThemedText numberOfLines={1} style={styles.title}>
+          {item.title}
+        </ThemedText>
+        <ThemedText numberOfLines={1} style={styles.year}>
+          {item.subtitle}
+        </ThemedText>
+        {item.media_type === "movie" && (
+          <>
+            <UpNextButton movieId={item.id} />
+            <ThemedView style={styles.buttons}>
+              <WatchedButton movieId={item.id} />
+              <BlockedButton movieId={item.id} />
+            </ThemedView>
+          </>
+        )}
+      </ThemedView>
+    </ThemedView>
+  </TouchableHighlight>
+);
 
 const styles = StyleSheet.create({
   buttons: { flexDirection: "row" },
@@ -126,28 +125,28 @@ const getItemLayout = (
 const keyExtractor = (datum: Datum): string =>
   `${datum.media_type}-${datum.id}`;
 
-// eslint-disable-next-line react/display-name
-export const ItemList = memo(
-  ({ items, selectItem }: ItemProps): JSX.Element => {
-    const renderItem = useMemo(() => getRenderItem(selectItem), [selectItem]);
-    const data = useMemo(() => items.map(toDatum), [items]);
+const MemoItemList = ({ items, selectItem }: ItemProps): JSX.Element => {
+  const data = useMemo(
+    () => items.map(toDatum(selectItem)),
+    [items, selectItem]
+  );
 
-    return (
-      <ThemedView style={styles.fill}>
-        <FlatList
-          contentContainerStyle={styles.resultsContent}
-          keyboardShouldPersistTaps="handled"
-          style={styles.results}
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          removeClippedSubviews
-          initialNumToRender={5}
-          windowSize={5 * 2 + 1}
-          getItemLayout={getItemLayout}
-        />
-      </ThemedView>
-    );
-  },
-  equal
-);
+  return (
+    <ThemedView style={styles.fill}>
+      <FlatList
+        contentContainerStyle={styles.resultsContent}
+        keyboardShouldPersistTaps="handled"
+        style={styles.results}
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        removeClippedSubviews
+        initialNumToRender={5}
+        windowSize={5 * 2 + 1}
+        getItemLayout={getItemLayout}
+      />
+    </ThemedView>
+  );
+};
+
+export const ItemList = memo(MemoItemList, equal);

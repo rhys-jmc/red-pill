@@ -32,12 +32,10 @@ const App = (): JSX.Element | null => {
   );
 };
 
-// eslint-disable-next-line import/no-default-export
 export default App;
 
 const loadResourcesAndDataAsync = (): Promise<void> =>
   loadAsync({
     ...Ionicons.font,
-    // eslint-disable-next-line unicorn/prefer-module
     "space-mono": require("./assets/fonts/SpaceMono-Regular.ttf"),
   });

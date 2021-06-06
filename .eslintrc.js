@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/prefer-module */
 const { defineConfig } = require("eslint-define-config");
 
 const JS_RECOMMENDED = [
@@ -99,6 +98,7 @@ module.exports = defineConfig({
     ],
     "functional/no-conditional-statement": "off",
     "functional/no-expression-statement": "off",
+    "functional/no-mixed-type": "off",
     "functional/no-throw-statement": "off",
     "functional/no-return-void": "off",
 
@@ -140,6 +140,7 @@ module.exports = defineConfig({
 
     "unicorn/no-array-callback-reference": "off",
     "unicorn/no-useless-undefined": "off",
+    "unicorn/prefer-module": "off",
     "unicorn/prefer-node-protocol": "off",
     "unicorn/prevent-abbreviations": [
       "error",
@@ -158,15 +159,16 @@ module.exports = defineConfig({
       extends: [...TS_RECOMMENDED, ...REACT_NAITVE_RECOMMENDED, "prettier"],
       rules: { "react/prop-types": "off", "unicorn/no-null": "off" },
     },
-    { files: ["App.tsx"], rules: { "unicorn/filename-case": "off" } },
+    {
+      files: ["App.tsx"],
+      rules: {
+        "import/no-default-export": "off",
+        "unicorn/filename-case": "off",
+      },
+    },
     {
       files: ["**/*.spec.tsx"],
       rules: { "functional/no-expression-statement": "off" },
     },
-    {
-      files: ["babel.config.js"],
-      rules: { "unicorn/prefer-module": "off" },
-    },
   ],
 });
-/* eslint-enable unicorn/prefer-module */
