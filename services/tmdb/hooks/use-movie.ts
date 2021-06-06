@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect, useMemo } from "react";
 
+import { reportError } from "../../../helpers";
 import { getMovie } from "../helpers";
 
 import type { Movie } from "../types";
@@ -24,7 +25,7 @@ export const useMovie = (
         setIsLoading(false);
         return movie;
       })
-      .catch(console.error);
+      .catch(reportError);
 
     return source.cancel;
   }, [movieId]);

@@ -7,6 +7,7 @@ import React, {
   useState,
 } from "react";
 
+import { reportError } from "../helpers";
 import { makeStorage } from "../services/storage";
 
 import { useBlocked } from "./blocked";
@@ -35,11 +36,11 @@ export const UpNextProvider: FC = ({ children }) => {
     storage
       .get()
       .then(({ list }) => setList(list))
-      .catch(console.error);
+      .catch(reportError);
   }, []);
 
   useEffect(() => {
-    storage.set({ list: _list }).catch(console.error);
+    storage.set({ list: _list });
   }, [_list]);
 
   const add = useCallback(

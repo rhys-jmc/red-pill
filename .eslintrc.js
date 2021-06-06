@@ -138,6 +138,8 @@ module.exports = defineConfig({
 
     "security/detect-object-injection": "off",
 
+    "testing-library/prefer-screen-queries": "off",
+
     "unicorn/no-array-callback-reference": "off",
     "unicorn/no-useless-undefined": "off",
     "unicorn/prefer-module": "off",

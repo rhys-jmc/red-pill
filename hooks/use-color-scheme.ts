@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useColorScheme as _useColorScheme } from "react-native";
 
+import { reportError } from "../helpers";
 import { makeStorage } from "../services/storage";
 
 import type { ColorSchemeName } from "react-native";
@@ -20,11 +21,11 @@ export const useColorScheme = (): NonNullable<ColorSchemeName> => {
     storage
       .get()
       .then(({ scheme }) => setSavedScheme(scheme))
-      .catch(console.error);
+      .catch(reportError);
   }, []);
 
   useEffect(() => {
-    if (_scheme) storage.set({ scheme: _scheme }).catch(console.error);
+    if (_scheme) storage.set({ scheme: _scheme });
   }, [_scheme]);
 
   return _scheme ?? savedScheme ?? "light";

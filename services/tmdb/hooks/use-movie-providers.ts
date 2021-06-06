@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect, useMemo } from "react";
 
+import { reportError } from "../../../helpers";
 import { getMovieProviders } from "../helpers";
 
 import type { ProviderMap } from "../types";
@@ -31,7 +32,7 @@ export const useMovieProviders = (
         setIsLoading(false);
         return AU;
       })
-      .catch(console.error);
+      .catch(reportError);
 
     return source.cancel;
   }, [movieId]);

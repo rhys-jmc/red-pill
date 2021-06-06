@@ -29,6 +29,18 @@
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "vork",
+            "project": "red-pill",
+            "authToken": "e204f42e80df41f186f6f45da1368ece043b6a6a9b3245fca9a82d43a01dbf50"
+          }
+        }
+      ]
     }
   }
 }

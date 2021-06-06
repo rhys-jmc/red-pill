@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect, useMemo } from "react";
 
+import { reportError } from "../../../helpers";
 import { getPerson } from "../helpers";
 
 import type { Person } from "../types";
@@ -24,7 +25,7 @@ export const usePerson = (
         setIsLoading(false);
         return person;
       })
-      .catch(console.error);
+      .catch(reportError);
 
     return source.cancel;
   }, [personId]);

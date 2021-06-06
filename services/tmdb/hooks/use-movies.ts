@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect, useMemo } from "react";
 
 import { useBlocked } from "../../../context";
+import { reportError } from "../../../helpers";
 import { getMovie } from "../helpers";
 
 import type { Movie } from "../types";
@@ -33,7 +34,7 @@ export const useMovies = ({
         setIsLoading(false);
         return movies;
       })
-      .catch(console.error);
+      .catch(reportError);
 
     return () => {
       items.map(({ source }) => source.cancel());

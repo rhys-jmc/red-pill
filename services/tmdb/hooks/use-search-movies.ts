@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect, useMemo } from "react";
 
 import { useBlocked, useWatched } from "../../../context";
+import { reportError } from "../../../helpers";
 import { useDebounce } from "../../../hooks";
 import { getSearchMovies } from "../helpers";
 
@@ -36,7 +37,7 @@ export const useSearchMovies = (
         setIsLoading(false);
         return results;
       })
-      .catch(console.error);
+      .catch(reportError);
 
     return source.cancel;
   }, [query]);
