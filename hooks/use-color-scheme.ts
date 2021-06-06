@@ -12,23 +12,20 @@ const storage = makeStorage("color-scheme", { scheme: inital });
 // type suggests that it can be null. This will not happen in practice, so this
 // makes it a bit easier to work with.
 export const useColorScheme = (): NonNullable<ColorSchemeName> => {
-  const [scheme, setScheme] = useState<NonNullable<ColorSchemeName>>(inital);
   const _scheme = _useColorScheme();
+  const [savedScheme, setSavedScheme] =
+    useState<NonNullable<ColorSchemeName>>();
 
   useEffect(() => {
     storage
       .get()
-      .then((x) => setScheme(x.scheme))
+      .then(({ scheme }) => setSavedScheme(scheme))
       .catch(console.error);
   }, []);
 
   useEffect(() => {
-    if (_scheme) setScheme(_scheme);
+    if (_scheme) storage.set({ scheme: _scheme }).catch(console.error);
   }, [_scheme]);
 
-  useEffect(() => {
-    storage.set({ scheme }).catch(console.error);
-  }, [scheme]);
-
-  return scheme;
+  return _scheme ?? savedScheme ?? "light";
 };

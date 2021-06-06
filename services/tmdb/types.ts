@@ -20,7 +20,7 @@ export type SearchMovieResult = BaseMovie & {
 
 type ResultsData<T> = {
   readonly page: number;
-  readonly results: readonly T[];
+  readonly results: T;
   readonly total_results: number;
   readonly total_pages: number;
 };
@@ -92,8 +92,8 @@ export type SearchMultiResult =
   | SearchMultiTvResult
   | SearchMultiPersonResult;
 
-export type SearchMovieData = ResultsData<SearchMovieResult>;
-export type SearchMultiData = ResultsData<SearchMultiResult>;
+export type SearchMovieData = ResultsData<readonly SearchMovieResult[]>;
+export type SearchMultiData = ResultsData<readonly SearchMultiResult[]>;
 
 type Cast = SearchMovieResult & {
   readonly character: string;
@@ -128,3 +128,23 @@ export type Person = {
   readonly imdb_id: string;
   readonly homepage: string | null;
 };
+
+type Provider = {
+  readonly display_priority: number;
+  readonly logo_path: string;
+  readonly provider_id: number;
+  readonly provider_name: string;
+};
+
+type ProviderType = "rent" | "buy" | "flatrate";
+
+export type ProviderMap = Partial<Record<ProviderType, readonly Provider[]>> & {
+  readonly link: string;
+};
+
+// there's more, but this is all we care about for now
+type CountryCode = "AU";
+
+type Providers = Partial<Record<CountryCode, ProviderMap>>;
+
+export type ProviderData = ResultsData<Providers>;
