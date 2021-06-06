@@ -3,9 +3,9 @@ import { useState, useEffect, useMemo } from "react";
 
 import { useBlocked, useWatched } from "../../../context";
 import { useDebounce } from "../../../hooks";
-import { API_URL, API_KEY_PARAM } from "../constants";
+import { getSearchMovies } from "../helpers";
 
-import type { SearchMovieData, SearchMovieResult } from "../types";
+import type { SearchMovieResult } from "../types";
 
 export const useSearchMovies = (
   input: string
@@ -30,14 +30,8 @@ export const useSearchMovies = (
 
     const source = axios.CancelToken.source();
 
-    axios
-      .get<SearchMovieData>(
-        `${API_URL}/search/movie?query=${encodeURIComponent(
-          query
-        )}&${API_KEY_PARAM}`,
-        { cancelToken: source.token }
-      )
-      .then(({ data: { results } }) => {
+    getSearchMovies({ query, source })
+      .then(({ results }) => {
         setMovies(results);
         setIsLoading(false);
         return results;

@@ -3,11 +3,9 @@ import { useState, useEffect, useMemo } from "react";
 
 import { useBlocked, useWatched } from "../../../context";
 import { useDebounce } from "../../../hooks";
-import { API_URL, API_KEY_PARAM } from "../constants";
-import { isMovie } from "../helpers";
+import { isMovie, getSearchMulti } from "../helpers";
 
 import type {
-  SearchMultiData,
   SearchMultiMovieResult,
   SearchMultiPersonResult,
   SearchMultiResult,
@@ -38,14 +36,8 @@ export const useSearchMulti = (
 
     const source = axios.CancelToken.source();
 
-    axios
-      .get<SearchMultiData>(
-        `${API_URL}/search/multi?query=${encodeURIComponent(
-          query
-        )}&${API_KEY_PARAM}`,
-        { cancelToken: source.token }
-      )
-      .then(({ data: { results } }) => {
+    getSearchMulti({ query, source })
+      .then(({ results }) => {
         setItems(results.filter(isMovieOrPerson));
         setIsLoading(false);
         return results;
