@@ -33,7 +33,7 @@ export const useSearchMovies = (
     axios
       .get<SearchMovieData>(
         `${API_URL}/search/movie?query=${encodeURIComponent(
-          input
+          query
         )}&${API_KEY_PARAM}`,
         { cancelToken: source.token }
       )

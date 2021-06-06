@@ -41,7 +41,7 @@ export const useSearchMulti = (
     axios
       .get<SearchMultiData>(
         `${API_URL}/search/multi?query=${encodeURIComponent(
-          input
+          query
         )}&${API_KEY_PARAM}`,
         { cancelToken: source.token }
       )

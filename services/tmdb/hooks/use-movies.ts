@@ -45,7 +45,7 @@ export const useMovies = ({
       _movies
         .filter((m) => showBlocked || !isBlocked(m.id))
         .sort((a, b) => a.title.localeCompare(b.title)),
-    [_movies, isBlocked]
+    [_movies, isBlocked, showBlocked]
   );
 
   return useMemo(() => ({ movies, isLoading }), [movies, isLoading]);

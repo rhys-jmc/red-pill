@@ -131,6 +131,9 @@ module.exports = defineConfig({
 
     "react/jsx-no-literals": "error",
 
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "error",
+
     "react-native/no-raw-text": ["error", { skip: ["MonoText", "ThemedText"] }],
 
     "security/detect-object-injection": "off",
