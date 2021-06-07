@@ -49,6 +49,7 @@ const App = (): JSX.Element | null => {
 
 export default Sentry.Native.withErrorBoundary(App, {
   fallback: ErrorWasThrown,
+  showDialog: true,
 });
 
 const loadResourcesAndDataAsync = (): Promise<void> =>
