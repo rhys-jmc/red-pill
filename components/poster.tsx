@@ -15,7 +15,7 @@ export const Poster = ({
   variant,
   ...props
 }: {
-  readonly path: string | null;
+  readonly path?: string | null;
   readonly variant: "poster" | "profile";
   readonly style?: ComponentProps<typeof Image>["style"];
 } & (
@@ -30,27 +30,29 @@ export const Poster = ({
     ...(Array.isArray(style) ? style : [style]),
   ];
 
+  const dimensions =
+    "width" in props && props.width
+      ? {
+          width: props.width,
+          height: (props.width / styles.poster.width) * styles.poster.height,
+        }
+      : "height" in props && props.height
+      ? {
+          height: props.height,
+          width: (props.height / styles.poster.height) * styles.poster.width,
+        }
+      : {};
+
   return path ? (
     <Image
       source={{ uri: getImageUri(path, variant) }}
       style={combinedStyle}
       accessibilityIgnoresInvertColors
-      resizeMode="contain"
-      {...("width" in props && props.width
-        ? {
-            width: props.width,
-            height: (props.width / styles.poster.width) * styles.poster.height,
-          }
-        : {})}
-      {...("height" in props && props.height
-        ? {
-            height: props.height,
-            width: (props.height / styles.poster.height) * styles.poster.width,
-          }
-        : {})}
+      resizeMode="cover"
+      {...dimensions}
     />
   ) : (
-    <ThemedView style={combinedStyle}>
+    <ThemedView style={[combinedStyle, { ...dimensions }]}>
       <Ionicons
         name={variant === "poster" ? "person" : "film"}
         color={color}
