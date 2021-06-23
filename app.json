@@ -2,7 +2,7 @@
   "expo": {
     "name": "Red Pill",
     "slug": "red-pill",
-    "version": "2.2.1",
+    "version": "2.3.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -20,11 +20,9 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.vork.bluepill",
-      "usesIcloudStorage": true,
       "infoPlist": { "RCTAsyncStorageExcludeFromBackup": false }
     },
     "android": {
-      "allowBackup": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"

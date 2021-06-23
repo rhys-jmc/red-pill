@@ -16,27 +16,42 @@ export const LinkingConfiguration: LinkingOptions = {
         screens: {
           Discover: {
             screens: {
-              DiscoverScreen: "discover-screen",
-              MovieDetailsScreen: "movie",
-              PersonMoviesScreen: "person",
+              DiscoverScreen: "discover",
+              MovieDetailsScreen: {
+                path: "discover/movie/:movieId",
+                parse: { movieId: Number },
+              },
+              PersonMoviesScreen: {
+                path: "discover/person/:personId",
+                parse: { movieId: Number },
+              },
             },
           },
           UpNext: {
             screens: {
               UpNextScreen: "up-next",
-              MovieDetailsScreen: "movie",
+              MovieDetailsScreen: {
+                path: "up-next/movie/:movieId",
+                parse: { movieId: Number },
+              },
             },
           },
           Watched: {
             screens: {
               WatchedScreen: "watched",
-              MovieDetailsScreen: "movie",
+              MovieDetailsScreen: {
+                path: "watched/movie/:movieId",
+                parse: { movieId: Number },
+              },
             },
           },
           Blocked: {
             screens: {
               BlockedScreen: "blocked",
-              MovieDetailsScreen: "movie",
+              MovieDetailsScreen: {
+                path: "blocked/movie/:movieId",
+                parse: { movieId: Number },
+              },
             },
           },
         },
