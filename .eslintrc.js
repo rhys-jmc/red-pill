@@ -146,7 +146,7 @@ module.exports = defineConfig({
     "unicorn/prefer-node-protocol": "off",
     "unicorn/prevent-abbreviations": [
       "error",
-      { ignore: [/dir/i, /param/i, /prev/i, /props/i, /ref/i] },
+      { ignore: [/dir/i, /doc/i, /param/i, /prev/i, /props/i, /ref/i] },
     ],
   },
   overrides: [

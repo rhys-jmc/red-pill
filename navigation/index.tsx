@@ -11,22 +11,18 @@ import {
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 
+import { useColorScheme } from "../context";
 import { NotFoundScreen } from "../screens";
 
 import { BottomTabNavigator } from "./bottom-tab-navigator";
 import { LinkingConfiguration } from "./linking-configuration";
 
 import type { RootStackParamList } from "./types";
-import type { ColorSchemeName } from "react-native";
 
-export const Navigation = ({
-  colorScheme,
-}: {
-  readonly colorScheme: ColorSchemeName;
-}): JSX.Element => (
+export const Navigation = (): JSX.Element => (
   <NavigationContainer
     linking={LinkingConfiguration}
-    theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+    theme={useColorScheme() === "dark" ? DarkTheme : DefaultTheme}
   >
     <RootNavigator />
   </NavigationContainer>

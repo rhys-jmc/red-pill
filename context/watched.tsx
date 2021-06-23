@@ -28,9 +28,13 @@ const initial: readonly number[] = [];
 const storage = makeStorage("watched", { list: initial });
 
 export const WatchedProvider: FC = ({ children }) => {
-  const [_list, setList] = useState<readonly number[]>([]);
+  const [_list, setList] = useState<readonly number[]>();
   const { isBlocked } = useBlocked();
-  const list = _list.filter((id) => !isBlocked(id));
+
+  const list = useMemo(
+    () => _list?.filter((id) => !isBlocked(id)) ?? [],
+    [_list, isBlocked]
+  );
 
   useEffect(() => {
     storage
@@ -40,16 +44,17 @@ export const WatchedProvider: FC = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    storage.set({ list: _list });
+    if (_list) storage.set({ list: _list });
   }, [_list]);
 
   const add = useCallback(
-    (movieId: number) => setList((prev) => [...prev, movieId]),
+    (movieId: number) => setList((prev = []) => [...prev, movieId]),
     []
   );
 
   const remove = useCallback(
-    (movieId: number) => setList((prev) => prev.filter((id) => id !== movieId)),
+    (movieId: number) =>
+      setList((prev = []) => prev.filter((id) => id !== movieId)),
     []
   );
 

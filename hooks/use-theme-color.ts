@@ -1,6 +1,5 @@
 import { theme } from "../constants";
-
-import { useColorScheme } from "./use-color-scheme";
+import { useColorScheme } from "../context";
 
 export const useThemeColor = (
   props: { readonly light?: string; readonly dark?: string },
@@ -9,5 +8,5 @@ export const useThemeColor = (
   const scheme = useColorScheme();
   const colorFromProps = props[scheme];
 
-  return colorFromProps ? colorFromProps : theme[scheme][colorName];
+  return colorFromProps ?? theme[scheme][colorName];
 };

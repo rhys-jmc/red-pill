@@ -9,7 +9,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 
 import { theme } from "../constants";
-import { useColorScheme } from "../hooks";
+import { useColorScheme } from "../context";
 import {
   BlockedScreen,
   DiscoverScreen,

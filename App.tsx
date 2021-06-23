@@ -10,7 +10,6 @@ import * as Sentry from "sentry-expo";
 import { ErrorWasThrown } from "./components";
 import { ContextProvier } from "./context";
 import { reportError } from "./helpers";
-import { useColorScheme } from "./hooks";
 import { Navigation } from "./navigation";
 
 Sentry.init({
@@ -27,7 +26,6 @@ Sentry.init({
 
 const App = (): JSX.Element | null => {
   const [isLoading, setIsLoading] = useState(true);
-  const colorScheme = useColorScheme();
 
   useEffect(() => {
     loadResourcesAndDataAsync()
@@ -40,7 +38,7 @@ const App = (): JSX.Element | null => {
   ) : (
     <SafeAreaProvider>
       <ContextProvier>
-        <Navigation colorScheme={colorScheme} />
+        <Navigation />
         <StatusBar />
       </ContextProvier>
     </SafeAreaProvider>
