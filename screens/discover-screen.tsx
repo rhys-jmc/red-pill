@@ -20,6 +20,4 @@ export const DiscoverScreen = ({
   </ThemedView>
 );
 
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-});
+const styles = StyleSheet.create({ container: { flex: 1 } });

@@ -101,7 +101,6 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingVertical: 10,
   },
-  results: { borderBottomLeftRadius: 8, borderBottomRightRadius: 8 },
   resultsContent: { alignItems: "stretch", paddingBottom: 20 },
   title: { fontSize: 20, fontWeight: "500" },
   year: { fontSize: 16 },
@@ -132,20 +131,18 @@ const MemoItemList = ({ items, selectItem }: ItemProps): JSX.Element => {
   );
 
   return (
-    <ThemedView style={styles.fill}>
-      <FlatList
-        contentContainerStyle={styles.resultsContent}
-        keyboardShouldPersistTaps="handled"
-        style={styles.results}
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        removeClippedSubviews
-        initialNumToRender={5}
-        windowSize={5 * 2 + 1}
-        getItemLayout={getItemLayout}
-      />
-    </ThemedView>
+    <FlatList
+      contentContainerStyle={styles.resultsContent}
+      style={styles.fill}
+      data={data}
+      renderItem={renderItem}
+      keyExtractor={keyExtractor}
+      initialNumToRender={5}
+      windowSize={5 * 2 + 1}
+      getItemLayout={getItemLayout}
+      removeClippedSubviews
+      keyboardDismissMode="on-drag"
+    />
   );
 };
 

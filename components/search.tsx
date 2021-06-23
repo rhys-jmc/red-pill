@@ -1,7 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
 import { transparentize } from "polished";
 import React, { useRef, useState } from "react";
-import { TextInput, ActivityIndicator, StyleSheet, View } from "react-native";
+import {
+  TextInput,
+  ActivityIndicator,
+  StyleSheet,
+  View,
+  TouchableWithoutFeedback,
+} from "react-native";
 
 import { useThemeColor } from "../hooks";
 import { useSearchMulti } from "../services/tmdb";
@@ -21,54 +27,59 @@ export const Search = ({
   const [input, setInput] = useState<string>("");
   const { items, isLoading } = useSearchMulti(input);
   const color = useThemeColor({}, "text");
+  const blurTextInput = (): void => textInputRef.current?.blur();
   const focusTextInput = (): void => textInputRef.current?.focus();
   const shouldShowPlaceholder = !isFocused && !input;
-  const shouldShowResults = items.length > 0 && !isLoading;
   const shouldShowClearIcon = Boolean(input);
 
   return (
-    <ThemedView style={styles.fill}>
-      <ThemedView style={{ backgroundColor: transparentize(0.85, color) }}>
-        <TextInput
-          ref={textInputRef}
-          style={[styles.textInput, { color }]}
-          onChangeText={setInput}
-          value={input}
-          autoCompleteType="off"
-          autoCapitalize="none"
-          autoCorrect={false}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          returnKeyType="search"
-        />
-        <View style={styles.inputIconLeft}>
-          <Ionicons color={color} name="search-outline" size={20} />
-        </View>
-        {shouldShowPlaceholder && (
-          <ThemedText onPress={focusTextInput} style={styles.inputPlaceHolder}>
-            {"Search the rabbit hole"}
-          </ThemedText>
-        )}
-        <View style={styles.inputIconRight}>
-          {isLoading ? (
-            <ActivityIndicator />
-          ) : (
-            shouldShowClearIcon && (
-              <Ionicons
-                color={color}
-                name="close-circle-outline"
-                onPress={() => {
-                  setInput("");
-                  focusTextInput();
-                }}
-                size={20}
-              />
-            )
+    <TouchableWithoutFeedback onPressIn={blurTextInput} accessible={false}>
+      <ThemedView style={styles.fill}>
+        <ThemedView style={{ backgroundColor: transparentize(0.85, color) }}>
+          <TextInput
+            ref={textInputRef}
+            style={[styles.textInput, { color }]}
+            onChangeText={setInput}
+            value={input}
+            autoCompleteType="off"
+            autoCapitalize="none"
+            autoCorrect={false}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            returnKeyType="search"
+          />
+          <View style={styles.inputIconLeft}>
+            <Ionicons color={color} name="search-outline" size={20} />
+          </View>
+          {shouldShowPlaceholder && (
+            <ThemedText
+              onPress={focusTextInput}
+              style={styles.inputPlaceHolder}
+            >
+              {"Search the rabbit hole"}
+            </ThemedText>
           )}
-        </View>
+          <View style={styles.inputIconRight}>
+            {isLoading ? (
+              <ActivityIndicator />
+            ) : (
+              shouldShowClearIcon && (
+                <Ionicons
+                  color={color}
+                  name="close-circle-outline"
+                  onPress={() => {
+                    setInput("");
+                    focusTextInput();
+                  }}
+                  size={20}
+                />
+              )
+            )}
+          </View>
+        </ThemedView>
+        <ItemList {...{ items: isLoading ? [] : items, selectItem }} />
       </ThemedView>
-      {shouldShowResults && <ItemList {...{ items, selectItem }} />}
-    </ThemedView>
+    </TouchableWithoutFeedback>
   );
 };
 
