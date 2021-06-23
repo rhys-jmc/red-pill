@@ -1,22 +1,24 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback } from "react";
 import { Button } from "react-native";
 
-import { useBlocked, useWatched } from "../context";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { toggleMovieList } from "../slices/movies";
 
 export const WatchedButton = ({
   movieId,
 }: {
   readonly movieId: number;
 }): JSX.Element | null => {
-  const { isBlocked } = useBlocked();
-  const { hasWatched, toggle } = useWatched();
-  const handlePress = useCallback(() => toggle(movieId), [movieId, toggle]);
-  const title = useMemo(
-    () => (hasWatched(movieId) ? "Unwatch" : "Watched"),
-    [hasWatched, movieId]
+  const dispatch = useAppDispatch();
+  const movieListData = useAppSelector((state) => state.movies[movieId]);
+  const title = movieListData?.hasWatched ? "Unwatch" : "Watched";
+
+  const handlePress = useCallback(
+    () => dispatch(toggleMovieList({ movieId, category: "hasWatched" })),
+    [dispatch, movieId]
   );
 
-  return isBlocked(movieId) ? null : (
+  return movieListData?.isBlocked ? null : (
     <Button title={title} onPress={handlePress} />
   );
 };

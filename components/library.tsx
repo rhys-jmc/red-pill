@@ -3,7 +3,7 @@ import React, { memo, useCallback } from "react";
 import { TouchableOpacity, StyleSheet, FlatList } from "react-native";
 
 import { useLayout } from "../hooks";
-import { useMovie } from "../services/tmdb";
+import { useGetMovie } from "../services/tmdb";
 
 import { Poster } from "./poster";
 import { ThemedView } from "./themed";
@@ -18,7 +18,7 @@ const MemoLibraryItem = ({
   readonly movieId: number;
   readonly navigateToMovieDetails: (movieId: number) => void;
 }): JSX.Element => {
-  const { movie } = useMovie(movieId);
+  const { data: movie } = useGetMovie(movieId);
   const { window } = useLayout();
   const posterWidth = (window.width - posterMargin * 4) / 3;
 

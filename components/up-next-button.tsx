@@ -1,22 +1,24 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback } from "react";
 import { Button } from "react-native";
 
-import { useBlocked, useUpNext } from "../context";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { toggleMovieList } from "../slices/movies";
 
 export const UpNextButton = ({
   movieId,
 }: {
   readonly movieId: number;
 }): JSX.Element | null => {
-  const { isBlocked } = useBlocked();
-  const { includes, toggle } = useUpNext();
-  const title = useMemo(
-    () => `${includes(movieId) ? "Remove from" : "Add to"} Up Next`,
-    [includes, movieId]
-  );
-  const handlePress = useCallback(() => toggle(movieId), [movieId, toggle]);
+  const dispatch = useAppDispatch();
+  const movieListData = useAppSelector((state) => state.movies[movieId]);
+  const title = `${movieListData?.isUpNext ? "Remove from" : "Add to"} Up Next`;
 
-  return isBlocked(movieId) ? null : (
+  const handlePress = useCallback(
+    () => dispatch(toggleMovieList({ movieId, category: "isUpNext" })),
+    [dispatch, movieId]
+  );
+
+  return movieListData?.isBlocked ? null : (
     <Button title={title} onPress={handlePress} />
   );
 };

@@ -9,8 +9,9 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 
-import { useThemeColor } from "../hooks";
+import { useDebounce, useThemeColor } from "../hooks";
 import { useSearchMulti } from "../services/tmdb";
+import { isMovieOrPerson } from "../services/tmdb/helpers";
 
 import { ItemList } from "./item-list";
 import { ThemedText, ThemedView } from "./themed";
@@ -25,12 +26,14 @@ export const Search = ({
   const textInputRef = useRef<TextInput>(null);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [input, setInput] = useState<string>("");
-  const { items, isLoading } = useSearchMulti(input);
+  const { data, isLoading } = useSearchMulti(input);
+  // const items = data?.results.filter(isMovieOrPerson) ?? [];
   const color = useThemeColor({}, "text");
   const blurTextInput = (): void => textInputRef.current?.blur();
   const focusTextInput = (): void => textInputRef.current?.focus();
   const shouldShowPlaceholder = !isFocused && !input;
   const shouldShowClearIcon = Boolean(input);
+  const items = useDebounce(data?.results.filter(isMovieOrPerson) ?? []);
 
   return (
     <TouchableWithoutFeedback onPressIn={blurTextInput} accessible={false}>

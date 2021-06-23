@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import React from "react";
 import { Image, ImageBackground, ScrollView, StyleSheet } from "react-native";
 
-import { getImageUri, useMovieProviders } from "../services/tmdb";
+import { getImageUri, useGetMovieProviders } from "../services/tmdb";
 
 import { BlockedButton } from "./blocked-button";
 import { ImdbButton } from "./imdb-button";
@@ -18,7 +18,8 @@ export const MovieDetails = ({
 }: {
   readonly movie: Movie;
 }): JSX.Element => {
-  const { providerMap } = useMovieProviders(movie.id);
+  const { data } = useGetMovieProviders(movie.id);
+  const providerMap = data?.results.AU ?? {};
 
   return (
     <ScrollView contentContainerStyle={styles.page} style={styles.fill}>

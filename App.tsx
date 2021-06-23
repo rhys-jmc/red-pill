@@ -5,12 +5,15 @@ import { loadAsync } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 import * as Sentry from "sentry-expo";
 
 import { ErrorWasThrown } from "./components";
 import { ContextProvier } from "./context";
 import { reportError } from "./helpers";
 import { Navigation } from "./navigation";
+import { persistor, store } from "./store";
 
 Sentry.init({
   autoSessionTracking: true,
@@ -36,12 +39,16 @@ const App = (): JSX.Element | null => {
   return isLoading ? (
     <AppLoading />
   ) : (
-    <SafeAreaProvider>
-      <ContextProvier>
-        <Navigation />
-        <StatusBar />
-      </ContextProvier>
-    </SafeAreaProvider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <SafeAreaProvider>
+          <ContextProvier>
+            <Navigation />
+            <StatusBar />
+          </ContextProvier>
+        </SafeAreaProvider>
+      </PersistGate>
+    </Provider>
   );
 };
 

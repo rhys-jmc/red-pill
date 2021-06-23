@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { ActivityIndicator, StyleSheet } from "react-native";
 
 import { ItemList, ThemedView } from "../components";
-import { usePerson, usePersonMovieCredits } from "../services/tmdb";
+import { useGetPerson, useGetPersonMovieCredits } from "../services/tmdb";
 
 import type { DiscoverParamList } from "../navigation/types";
 import type { StackScreenProps } from "@react-navigation/stack";
@@ -11,8 +11,10 @@ export const PersonMoviesScreen = ({
   navigation: { navigate, setOptions },
   route: { params },
 }: StackScreenProps<DiscoverParamList, "PersonMoviesScreen">): JSX.Element => {
-  const { person } = usePerson(params.personId);
-  const { movieCredits, isLoading } = usePersonMovieCredits(params.personId);
+  const { data: person } = useGetPerson(params.personId);
+  const { data: movieCredits, isLoading } = useGetPersonMovieCredits(
+    params.personId
+  );
 
   useEffect(() => {
     setOptions({ headerTitle: person?.name ? person.name : "Loading..." });

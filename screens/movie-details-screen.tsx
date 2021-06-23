@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { ActivityIndicator, StyleSheet } from "react-native";
 
 import { MovieDetails, ThemedView } from "../components";
-import { useMovie } from "../services/tmdb";
+import { useGetMovie } from "../services/tmdb";
 
 import type { UpNextParamList } from "../navigation/types";
 import type { StackScreenProps } from "@react-navigation/stack";
@@ -11,7 +11,7 @@ export const MovieDetailsScreen = ({
   navigation: { setOptions },
   route: { params },
 }: StackScreenProps<UpNextParamList, "MovieDetailsScreen">): JSX.Element => {
-  const { movie, isLoading } = useMovie(params.movieId);
+  const { data: movie, isLoading } = useGetMovie(params.movieId);
 
   useEffect(() => {
     setOptions({ headerTitle: movie?.title ? movie.title : "Loading..." });

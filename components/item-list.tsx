@@ -142,6 +142,7 @@ const MemoItemList = ({ items, selectItem }: ItemProps): JSX.Element => {
       getItemLayout={getItemLayout}
       removeClippedSubviews
       keyboardDismissMode="on-drag"
+      keyboardShouldPersistTaps="handled"
     />
   );
 };
