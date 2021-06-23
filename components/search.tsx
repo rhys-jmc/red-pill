@@ -27,7 +27,6 @@ export const Search = ({
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [input, setInput] = useState<string>("");
   const { data, isLoading } = useSearchMulti(input);
-  // const items = data?.results.filter(isMovieOrPerson) ?? [];
   const color = useThemeColor({}, "text");
   const blurTextInput = (): void => textInputRef.current?.blur();
   const focusTextInput = (): void => textInputRef.current?.focus();
