@@ -49,7 +49,8 @@ export const ColorSchemeProvider: FC = ({ children }) => {
 export const useColorScheme = (): typeof initial => {
   const context = useContext(UpNextContext);
 
-  if (!context) throw new Error("useUpNext must be used within UpNextProvider");
+  if (!context)
+    throw new Error("useColorScheme must be used within ColorSchemeProvider");
 
   return context;
 };

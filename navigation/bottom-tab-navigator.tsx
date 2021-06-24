@@ -30,7 +30,7 @@ const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 const discoverTabBarIcon: BottomTabNavigationOptions["tabBarIcon"] = (
   props
-) => <Ionicons name="search-outline" {...props} />;
+) => <Ionicons name="map-outline" {...props} />;
 
 const searchTabBarIcon: BottomTabNavigationOptions["tabBarIcon"] = (props) => (
   <Ionicons name="search-outline" {...props} />
