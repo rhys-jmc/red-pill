@@ -14,6 +14,19 @@ export const LinkingConfiguration: LinkingOptions = {
     screens: {
       Root: {
         screens: {
+          Discover: {
+            screens: {
+              DiscoverScreen: "discover",
+              MovieDetailsScreen: {
+                path: "search/movie/:movieId",
+                parse: { movieId: Number },
+              },
+              PersonMoviesScreen: {
+                path: "search/person/:personId",
+                parse: { movieId: Number },
+              },
+            },
+          },
           Search: {
             screens: {
               SearchScreen: "search",

@@ -14,7 +14,7 @@ type BaseMovie = {
   readonly vote_count: number;
 };
 
-export type SearchMovieResult = BaseMovie & {
+export type MovieListResult = BaseMovie & {
   readonly genre_ids: readonly number[];
 };
 
@@ -54,12 +54,12 @@ export type Movie = BaseMovie & {
   readonly tagline: string | null;
 };
 
-export type SearchMultiMovieResult = SearchMovieResult & {
+export type SearchMultiMovieResult = MovieListResult & {
   readonly media_type: "movie";
 };
 
 type SearchMultiTvResult = Pick<
-  SearchMovieResult,
+  MovieListResult,
   | "poster_path"
   | "popularity"
   | "id"
@@ -92,15 +92,15 @@ export type SearchMultiResult =
   | SearchMultiTvResult
   | SearchMultiPersonResult;
 
-export type SearchMovieData = ResultsData<readonly SearchMovieResult[]>;
+export type MovieListData = ResultsData<readonly MovieListResult[]>;
 export type SearchMultiData = ResultsData<readonly SearchMultiResult[]>;
 
-type Cast = SearchMovieResult & {
+type Cast = MovieListResult & {
   readonly character: string;
   readonly credit_id: string;
 };
 
-type Crew = SearchMovieResult & {
+type Crew = MovieListResult & {
   readonly department: string;
   readonly job: string;
   readonly credit_id: string;

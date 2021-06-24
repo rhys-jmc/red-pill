@@ -5,7 +5,7 @@ import type {
   MovieCredits,
   Person,
   ProviderData,
-  SearchMovieData,
+  MovieListData,
   SearchMultiData,
 } from "./types";
 
@@ -15,6 +15,9 @@ export const tmdbApi = createApi({
   reducerPath: "tmdbApi",
   baseQuery: fetchBaseQuery({ baseUrl: "https://api.themoviedb.org/3/" }),
   endpoints: (builder) => ({
+    discoverMovies: builder.query<MovieListData, undefined>({
+      query: () => `discover/movie?${API_KEY_PARAM}`,
+    }),
     getMovie: builder.query<Movie, number>({
       query: (movieId) => `movie/${movieId}?${API_KEY_PARAM}`,
     }),
@@ -31,7 +34,7 @@ export const tmdbApi = createApi({
       query: (personId) => `person/${personId}/movie_credits?${API_KEY_PARAM}`,
     }),
 
-    searchMovies: builder.query<SearchMovieData, string>({
+    searchMovies: builder.query<MovieListData, string>({
       query: (query) =>
         `search/movie?query=${encodeURIComponent(query)}&${API_KEY_PARAM}`,
     }),
@@ -45,6 +48,7 @@ export const tmdbApi = createApi({
 
 const { endpoints } = tmdbApi;
 
+export const useDiscoverMovies = endpoints.discoverMovies.useQuery;
 export const useGetMovie = endpoints.getMovie.useQuery;
 export const useGetMovieProviders = endpoints.getMovieProviders.useQuery;
 export const useGetPerson = endpoints.getPerson.useQuery;
