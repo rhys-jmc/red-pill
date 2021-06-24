@@ -3,7 +3,13 @@ import { Ionicons } from "@expo/vector-icons";
 import AppLoading from "expo-app-loading";
 import { loadAsync } from "expo-font";
 import { StatusBar } from "expo-status-bar";
+import {
+  checkForUpdateAsync,
+  fetchUpdateAsync,
+  reloadAsync,
+} from "expo-updates";
 import React, { useEffect, useState } from "react";
+import { Alert } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
@@ -12,6 +18,7 @@ import * as Sentry from "sentry-expo";
 import { ErrorWasThrown } from "./components";
 import { ContextProvier } from "./context";
 import { reportError } from "./helpers";
+import { useAppStateStatus } from "./hooks";
 import { Navigation } from "./navigation";
 import { persistor, store } from "./store";
 
@@ -29,12 +36,28 @@ Sentry.init({
 
 const App = (): JSX.Element | null => {
   const [isLoading, setIsLoading] = useState(true);
+  const appStateStatus = useAppStateStatus();
 
   useEffect(() => {
     loadResourcesAndDataAsync()
       .then(() => setIsLoading(false))
       .catch(reportError);
   }, []);
+
+  useEffect(() => {
+    if (appStateStatus === "active") {
+      checkForUpdateAsync()
+        .then(async (result) => {
+          // eslint-disable-next-line promise/always-return
+          if (result.isAvailable) {
+            Alert.alert("Update Available", "Download & installing update...");
+            await fetchUpdateAsync();
+            await reloadAsync();
+          }
+        })
+        .catch(reportError);
+    }
+  }, [appStateStatus]);
 
   return isLoading ? (
     <AppLoading />
