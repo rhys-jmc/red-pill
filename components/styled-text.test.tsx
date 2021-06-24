@@ -6,6 +6,7 @@ import { ColorSchemeProvider } from "../context/color-scheme";
 import { MonoText } from "./styled-text";
 
 const text = "Snapshot test!";
+
 it(`renders correctly`, async () => {
   const { toJSON, getByText } = render(
     <ColorSchemeProvider>
