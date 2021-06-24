@@ -148,3 +148,5 @@ type CountryCode = "AU";
 type Providers = Partial<Record<CountryCode, ProviderMap>>;
 
 export type ProviderData = ResultsData<Providers>;
+
+export type ListCategory = "isUpNext" | "isBlocked" | "hasWatched";

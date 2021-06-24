@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import type { ListCategory } from "../services/tmdb";
 import type { PayloadAction } from "@reduxjs/toolkit";
-
-type ListCategory = "isUpNext" | "isBlocked" | "hasWatched";
 
 type State = Record<
   number,

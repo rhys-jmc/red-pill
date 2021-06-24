@@ -4,13 +4,16 @@ import { ActivityIndicator, StyleSheet } from "react-native";
 import { ItemList, ThemedView } from "../components";
 import { useGetPerson, useGetPersonMovieCredits } from "../services/tmdb";
 
-import type { DiscoverParamList } from "../navigation/types";
+import type { DiscoverStackParamList } from "../navigation/types";
 import type { StackScreenProps } from "@react-navigation/stack";
 
 export const PersonMoviesScreen = ({
   navigation: { navigate, setOptions },
   route: { params },
-}: StackScreenProps<DiscoverParamList, "PersonMoviesScreen">): JSX.Element => {
+}: StackScreenProps<
+  DiscoverStackParamList,
+  "PersonMoviesScreen"
+>): JSX.Element => {
   const { data: person } = useGetPerson(params.personId);
   const { data: movieCredits, isLoading } = useGetPersonMovieCredits(
     params.personId

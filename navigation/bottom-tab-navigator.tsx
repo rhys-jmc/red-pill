@@ -11,20 +11,16 @@ import React from "react";
 import { theme } from "../constants";
 import { useColorScheme } from "../context";
 import {
-  BlockedScreen,
   DiscoverScreen,
   MovieDetailsScreen,
   PersonMoviesScreen,
-  UpNextScreen,
-  WatchedScreen,
+  ListsScreen,
 } from "../screens";
 
 import type {
-  BlockedParamList,
   BottomTabParamList,
-  DiscoverParamList,
-  UpNextParamList,
-  WatchedParamList,
+  DiscoverStackParamList,
+  ListsStackParamList,
 } from "./types";
 import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 
@@ -34,16 +30,8 @@ const discoverTabBarIcon: BottomTabNavigationOptions["tabBarIcon"] = (
   props
 ) => <Ionicons name="search-outline" {...props} />;
 
-const upNextTabBarIcon: BottomTabNavigationOptions["tabBarIcon"] = (props) => (
+const listsTabBarIcon: BottomTabNavigationOptions["tabBarIcon"] = (props) => (
   <Ionicons name="list-outline" {...props} />
-);
-
-const watchedTabBarIcon: BottomTabNavigationOptions["tabBarIcon"] = (props) => (
-  <Ionicons name="checkmark-done-outline" {...props} />
-);
-
-const blockedTabBarIcon: BottomTabNavigationOptions["tabBarIcon"] = (props) => (
-  <Ionicons name="close-outline" {...props} />
 );
 
 export const BottomTabNavigator = (): JSX.Element => (
@@ -57,26 +45,16 @@ export const BottomTabNavigator = (): JSX.Element => (
       options={{ tabBarIcon: discoverTabBarIcon }}
     />
     <BottomTab.Screen
-      name="UpNext"
-      component={UpNextNavigator}
-      options={{ tabBarIcon: upNextTabBarIcon, tabBarLabel: "Up Next" }}
-    />
-    <BottomTab.Screen
-      name="Watched"
-      component={WatchedNavigator}
-      options={{ tabBarIcon: watchedTabBarIcon, tabBarLabel: "Watched" }}
-    />
-    <BottomTab.Screen
-      name="Blocked"
-      component={BlockedNavigator}
-      options={{ tabBarIcon: blockedTabBarIcon, tabBarLabel: "Blocked" }}
+      name="Lists"
+      component={ListsNavigator}
+      options={{ tabBarIcon: listsTabBarIcon, tabBarLabel: "Lists" }}
     />
   </BottomTab.Navigator>
 );
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const DiscoverStack = createStackNavigator<DiscoverParamList>();
+const DiscoverStack = createStackNavigator<DiscoverStackParamList>();
 
 const DiscoverNavigator = (): JSX.Element => (
   <DiscoverStack.Navigator>
@@ -96,50 +74,18 @@ const DiscoverNavigator = (): JSX.Element => (
   </DiscoverStack.Navigator>
 );
 
-const UpNextStack = createStackNavigator<UpNextParamList>();
+const ListsStack = createStackNavigator<ListsStackParamList>();
 
-const UpNextNavigator = (): JSX.Element => (
-  <UpNextStack.Navigator>
-    <UpNextStack.Screen
-      name="UpNextScreen"
-      component={UpNextScreen}
-      options={{ headerTitle: "Up Next" }}
+const ListsNavigator = (): JSX.Element => (
+  <ListsStack.Navigator>
+    <ListsStack.Screen
+      name="ListsScreen"
+      component={ListsScreen}
+      options={{ headerTitle: "Lists" }}
     />
-    <UpNextStack.Screen
+    <ListsStack.Screen
       name="MovieDetailsScreen"
       component={MovieDetailsScreen}
     />
-  </UpNextStack.Navigator>
-);
-
-const WatchedStack = createStackNavigator<WatchedParamList>();
-
-const WatchedNavigator = (): JSX.Element => (
-  <WatchedStack.Navigator>
-    <WatchedStack.Screen
-      name="WatchedScreen"
-      component={WatchedScreen}
-      options={{ headerTitle: "Watched" }}
-    />
-    <WatchedStack.Screen
-      name="MovieDetailsScreen"
-      component={MovieDetailsScreen}
-    />
-  </WatchedStack.Navigator>
-);
-
-const BlockedStack = createStackNavigator<BlockedParamList>();
-
-const BlockedNavigator = (): JSX.Element => (
-  <BlockedStack.Navigator>
-    <BlockedStack.Screen
-      name="BlockedScreen"
-      component={BlockedScreen}
-      options={{ headerTitle: "Blocked" }}
-    />
-    <BlockedStack.Screen
-      name="MovieDetailsScreen"
-      component={MovieDetailsScreen}
-    />
-  </BlockedStack.Navigator>
+  </ListsStack.Navigator>
 );

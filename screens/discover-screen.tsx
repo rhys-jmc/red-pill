@@ -3,12 +3,12 @@ import { StyleSheet } from "react-native";
 
 import { Search, ThemedView } from "../components";
 
-import type { DiscoverParamList } from "../navigation/types";
+import type { DiscoverStackParamList } from "../navigation/types";
 import type { StackScreenProps } from "@react-navigation/stack";
 
 export const DiscoverScreen = ({
   navigation: { navigate },
-}: StackScreenProps<DiscoverParamList, "DiscoverScreen">): JSX.Element => (
+}: StackScreenProps<DiscoverStackParamList, "DiscoverScreen">): JSX.Element => (
   <ThemedView style={styles.container}>
     <Search
       selectItem={(item) =>

@@ -10,28 +10,16 @@ export type RootStackParamList = {
 
 export type BottomTabParamList = {
   readonly Discover: undefined;
-  readonly UpNext: undefined;
-  readonly Watched: undefined;
-  readonly Blocked: undefined;
+  readonly Lists: undefined;
 };
 
-export type DiscoverParamList = {
+export type DiscoverStackParamList = {
   readonly DiscoverScreen: undefined;
   readonly MovieDetailsScreen: { readonly movieId: number };
   readonly PersonMoviesScreen: { readonly personId: number };
 };
 
-export type UpNextParamList = {
-  readonly UpNextScreen: undefined;
-  readonly MovieDetailsScreen: { readonly movieId: number };
-};
-
-export type WatchedParamList = {
-  readonly WatchedScreen: undefined;
-  readonly MovieDetailsScreen: { readonly movieId: number };
-};
-
-export type BlockedParamList = {
-  readonly BlockedScreen: undefined;
+export type ListsStackParamList = {
+  readonly ListsScreen: undefined;
   readonly MovieDetailsScreen: { readonly movieId: number };
 };
