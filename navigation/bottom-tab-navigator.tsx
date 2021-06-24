@@ -11,7 +11,7 @@ import React from "react";
 import { theme } from "../constants";
 import { useColorScheme } from "../context";
 import {
-  DiscoverScreen,
+  SearchScreen,
   MovieDetailsScreen,
   PersonMoviesScreen,
   ListsScreen,
@@ -19,16 +19,16 @@ import {
 
 import type {
   BottomTabParamList,
-  DiscoverStackParamList,
+  SearchStackParamList,
   ListsStackParamList,
 } from "./types";
 import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
-const discoverTabBarIcon: BottomTabNavigationOptions["tabBarIcon"] = (
-  props
-) => <Ionicons name="search-outline" {...props} />;
+const searchTabBarIcon: BottomTabNavigationOptions["tabBarIcon"] = (props) => (
+  <Ionicons name="search-outline" {...props} />
+);
 
 const listsTabBarIcon: BottomTabNavigationOptions["tabBarIcon"] = (props) => (
   <Ionicons name="list-outline" {...props} />
@@ -36,13 +36,13 @@ const listsTabBarIcon: BottomTabNavigationOptions["tabBarIcon"] = (props) => (
 
 export const BottomTabNavigator = (): JSX.Element => (
   <BottomTab.Navigator
-    initialRouteName="Discover"
+    initialRouteName="Search"
     tabBarOptions={{ activeTintColor: theme[useColorScheme()].tint }}
   >
     <BottomTab.Screen
-      name="Discover"
-      component={DiscoverNavigator}
-      options={{ tabBarIcon: discoverTabBarIcon }}
+      name="Search"
+      component={SearchNavigator}
+      options={{ tabBarIcon: searchTabBarIcon }}
     />
     <BottomTab.Screen
       name="Lists"
@@ -54,24 +54,24 @@ export const BottomTabNavigator = (): JSX.Element => (
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const DiscoverStack = createStackNavigator<DiscoverStackParamList>();
+const SearchStack = createStackNavigator<SearchStackParamList>();
 
-const DiscoverNavigator = (): JSX.Element => (
-  <DiscoverStack.Navigator>
-    <DiscoverStack.Screen
-      name="DiscoverScreen"
-      component={DiscoverScreen}
-      options={{ headerTitle: "Discover" }}
+const SearchNavigator = (): JSX.Element => (
+  <SearchStack.Navigator>
+    <SearchStack.Screen
+      name="SearchScreen"
+      component={SearchScreen}
+      options={{ headerTitle: "Search" }}
     />
-    <DiscoverStack.Screen
+    <SearchStack.Screen
       name="MovieDetailsScreen"
       component={MovieDetailsScreen}
     />
-    <DiscoverStack.Screen
+    <SearchStack.Screen
       name="PersonMoviesScreen"
       component={PersonMoviesScreen}
     />
-  </DiscoverStack.Navigator>
+  </SearchStack.Navigator>
 );
 
 const ListsStack = createStackNavigator<ListsStackParamList>();

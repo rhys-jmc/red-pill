@@ -9,12 +9,12 @@ export type RootStackParamList = {
 };
 
 export type BottomTabParamList = {
-  readonly Discover: undefined;
+  readonly Search: undefined;
   readonly Lists: undefined;
 };
 
-export type DiscoverStackParamList = {
-  readonly DiscoverScreen: undefined;
+export type SearchStackParamList = {
+  readonly SearchScreen: undefined;
   readonly MovieDetailsScreen: { readonly movieId: number };
   readonly PersonMoviesScreen: { readonly personId: number };
 };
