@@ -1,8 +1,10 @@
 import { format } from "date-fns";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image, ImageBackground, ScrollView, StyleSheet } from "react-native";
 
+import { reportError } from "../helpers";
 import { getImageUri, useGetMovieProviders } from "../services/tmdb";
+import { getSingleImageUri } from "../services/tmdb/images";
 
 import { BlockedButton } from "./blocked-button";
 import { ImdbButton } from "./imdb-button";
@@ -18,19 +20,32 @@ export const MovieDetails = ({
 }: {
   readonly movie: Movie;
 }): JSX.Element => {
+  const [uri, setUri] = useState<string>();
   const { data } = useGetMovieProviders(movie.id);
   const providerMap = data?.results.AU ?? {};
+
+  useEffect(() => {
+    if (movie.backdrop_path)
+      getSingleImageUri({
+        movieId: movie.id,
+        path: movie.backdrop_path,
+        variant: "backdrop",
+      })
+        .then(setUri)
+        .catch(reportError);
+  }, [movie.backdrop_path, movie.id]);
 
   return (
     <ScrollView contentContainerStyle={styles.page} style={styles.fill}>
       <ImageBackground
-        source={{ uri: getImageUri(movie.backdrop_path ?? "", "backdrop") }}
+        source={{ uri }}
         resizeMode="cover"
         style={styles.header}
         imageStyle={styles.headerImageStyle}
       >
         {movie.poster_path && (
           <Poster
+            movieId={movie.id}
             path={movie.poster_path}
             style={styles.poster}
             variant="poster"

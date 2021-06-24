@@ -1,27 +1,31 @@
 import { Ionicons } from "@expo/vector-icons";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image, StyleSheet } from "react-native";
 
+import { reportError } from "../helpers";
 import { useThemeColor } from "../hooks";
-import { getImageUri } from "../services/tmdb";
+import { getSingleImageUri } from "../services/tmdb/images";
 
 import { ThemedView } from "./themed";
 
 import type { ComponentProps } from "react";
 
 export const Poster = ({
+  movieId,
   path,
   style,
   variant,
   ...props
 }: {
-  readonly path?: string | null;
+  readonly movieId: number | undefined;
+  readonly path: string | null | undefined;
   readonly variant: "poster" | "profile";
   readonly style?: ComponentProps<typeof Image>["style"];
 } & (
   | { readonly height?: number }
   | { readonly width?: number }
 )): JSX.Element => {
+  const [uri, setUri] = useState<string>();
   const color = useThemeColor({}, "text");
   const backgroundColor = useThemeColor({}, "tabIconDefault");
   const combinedStyle = [
@@ -43,9 +47,16 @@ export const Poster = ({
         }
       : {};
 
-  return path ? (
+  useEffect(() => {
+    if (path && movieId)
+      getSingleImageUri({ movieId, path, variant })
+        .then(setUri)
+        .catch(reportError);
+  }, [movieId, path, variant]);
+
+  return uri ? (
     <Image
-      source={{ uri: getImageUri(path, variant) }}
+      source={{ uri }}
       style={combinedStyle}
       accessibilityIgnoresInvertColors
       resizeMode="cover"

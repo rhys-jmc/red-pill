@@ -25,6 +25,7 @@ const MemoLibraryItem = ({
   return (
     <TouchableOpacity onPress={() => navigateToMovieDetails(movieId)}>
       <Poster
+        movieId={movie?.id}
         path={movie?.poster_path}
         width={posterWidth}
         variant="poster"

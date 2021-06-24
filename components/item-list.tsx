@@ -60,6 +60,7 @@ const renderItem = ({ item }: { readonly item: Datum }): JSX.Element => (
   >
     <ThemedView style={styles.result}>
       <Poster
+        movieId={item.id}
         path={item.path}
         height={styles.result.height}
         variant={item.media_type === "movie" ? "poster" : "profile"}
